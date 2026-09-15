@@ -1,0 +1,9 @@
+target/
+node_modules/
+.next/
+.vercel/
+.env*
+!.env.example
+*.so
+*-keypair.json
+pinocchio-kit/probe/

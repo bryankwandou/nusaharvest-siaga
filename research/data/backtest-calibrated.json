@@ -1,0 +1,146 @@
+{
+  "source": "Open-Meteo Historical Weather API (ERA5 / ERA5-Land)",
+  "generated": "2026-09-14T11:43:12.149Z",
+  "results": [
+    {
+      "site": "Klaten",
+      "onset_window": "Oct 1 - Dec 31",
+      "p20_mm": 551,
+      "median_mm": 796,
+      "drought_hits_2001_2025": [
+        {
+          "year": 2006,
+          "mm": 502
+        },
+        {
+          "year": 2009,
+          "mm": 506
+        },
+        {
+          "year": 2018,
+          "mm": 507
+        },
+        {
+          "year": 2019,
+          "mm": 343
+        },
+        {
+          "year": 2023,
+          "mm": 316
+        }
+      ],
+      "hit_count": 5,
+      "max_3day_rain_feb_mar_2024": {
+        "date_end": "2024-03-09",
+        "mm": 95,
+        "percentile_vs_1991_2020_daily_windows": 98.62
+      }
+    },
+    {
+      "site": "Grobogan",
+      "onset_window": "Oct 1 - Dec 31",
+      "p20_mm": 559,
+      "median_mm": 645,
+      "drought_hits_2001_2025": [
+        {
+          "year": 2002,
+          "mm": 461
+        },
+        {
+          "year": 2004,
+          "mm": 521
+        },
+        {
+          "year": 2006,
+          "mm": 386
+        },
+        {
+          "year": 2009,
+          "mm": 443
+        },
+        {
+          "year": 2019,
+          "mm": 539
+        },
+        {
+          "year": 2023,
+          "mm": 402
+        }
+      ],
+      "hit_count": 6,
+      "max_3day_rain_feb_mar_2024": {
+        "date_end": "2024-02-05",
+        "mm": 83,
+        "percentile_vs_1991_2020_daily_windows": 99.27
+      }
+    },
+    {
+      "site": "Kupang",
+      "onset_window": "Oct 1 - Dec 31",
+      "p20_mm": 196,
+      "median_mm": 312,
+      "drought_hits_2001_2025": [
+        {
+          "year": 2004,
+          "mm": 189
+        },
+        {
+          "year": 2015,
+          "mm": 143
+        },
+        {
+          "year": 2019,
+          "mm": 171
+        },
+        {
+          "year": 2023,
+          "mm": 176
+        }
+      ],
+      "hit_count": 4,
+      "max_3day_rain_feb_mar_2024": {
+        "date_end": "2024-03-14",
+        "mm": 119,
+        "percentile_vs_1991_2020_daily_windows": 99.81
+      }
+    },
+    {
+      "site": "Demak",
+      "onset_window": "Oct 1 - Dec 31",
+      "p20_mm": 581,
+      "median_mm": 716,
+      "drought_hits_2001_2025": [
+        {
+          "year": 2002,
+          "mm": 446
+        },
+        {
+          "year": 2004,
+          "mm": 574
+        },
+        {
+          "year": 2006,
+          "mm": 377
+        },
+        {
+          "year": 2009,
+          "mm": 463
+        },
+        {
+          "year": 2019,
+          "mm": 534
+        },
+        {
+          "year": 2023,
+          "mm": 497
+        }
+      ],
+      "hit_count": 6,
+      "max_3day_rain_feb_mar_2024": {
+        "date_end": "2024-02-05",
+        "mm": 84,
+        "percentile_vs_1991_2020_daily_windows": 99.11
+      }
+    }
+  ]
+}

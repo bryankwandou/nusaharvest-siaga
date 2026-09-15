@@ -1,0 +1,30 @@
+[package]
+name = "pinocchio-kit"
+description = "Anchor-grade developer experience on top of pure Pinocchio: checks, constraints, zero-copy state, typed CPI."
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+
+[features]
+default = ["logging"]
+# Compile `msg!` into real sol_log calls. Disable to strip every log from the binary.
+logging = []
+# Borsh (de)serialization for dynamic-size accounts. Requires a heap allocator.
+borsh = ["dep:borsh"]
+# Anchor-compatible 8-byte sha256("account:<Name>") / sha256("global:<name>") discriminators.
+anchor-discriminator = ["dep:sha2-const-stable"]
+
+[dependencies]
+pinocchio = { workspace = true }
+pinocchio-system = { workspace = true }
+pinocchio-token = { workspace = true }
+pinocchio-log = { workspace = true }
+solana-address = { workspace = true }
+sha2-const-stable = { workspace = true, optional = true }
+borsh = { workspace = true, optional = true }
+
+# Off-chain builds (cargo check / unit tests) have no `sol_try_find_program_address`
+# syscall, so pull in the pure-Rust curve check there only. Never reaches the .so.
+[target.'cfg(not(any(target_os = "solana", target_arch = "bpf")))'.dependencies]
+solana-address = { workspace = true, features = ["curve25519"] }
