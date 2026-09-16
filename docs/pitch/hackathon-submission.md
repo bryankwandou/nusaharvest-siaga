@@ -7,10 +7,12 @@ A sponsor-funded conditional grant (hibah bersyarat) for Indonesian smallholder 
 ## Links
 
 - Live landing page: https://nusaharvest-siaga.vercel.app
+- Live devnet page: https://nusaharvest-siaga.vercel.app/app.html — reads the campaign accounts straight from devnet and verifies our end-to-end transactions in the browser
 - Code: https://github.com/bryankwandou/nusaharvest-siaga
 - Pitch deck: `docs/pitch/deck.html`
 - Demo video: **[PLACEHOLDER: VIDEO URL]**
-- Solana program ID (devnet): **[PLACEHOLDER: PROGRAM ID]**
+- Solana program ID (devnet): `GeCxWiK9HXEuEsueNQawDKZnwE1SkojPw9dtYLBkcGBX` ([explorer](https://explorer.solana.com/address/GeCxWiK9HXEuEsueNQawDKZnwE1SkojPw9dtYLBkcGBX?cluster=devnet))
+- Program notes, account layouts and every devnet signature: `program/README.md`
 
 ## Problem
 
@@ -44,8 +46,10 @@ Known limits: the strong 2015 El Nino did not trigger at the three Java sites, a
 
 ## Tech summary
 
-- **Solana program (Anchor, in progress):** campaign account with vault, `roster_root`, window timestamps, threshold, observed value, data hash, operator and auditor keys. Instructions: create/fund, LockRoster, Settle, Dispute (only within 172,800 seconds of settle), Release (permissionless after the window), PostReceipts, Refund. States: OPEN, SETTLED, DISPUTED, SETTLED_FINAL, RELEASED, RECEIPTED, REFUNDED.
-- **No farmer transactions:** farmers never sign transactions, so the program does not verify merkle proofs; verification happens client-side against the on-chain root.
+- **Solana program (pure Pinocchio, no Anchor, deployed to devnet):** a 368-byte campaign account holding the vault bump, `roster_root`, unit count, window timestamps, both thresholds, the observed value, the data hash, and the sponsor, operator, oracle and auditor keys. Instructions: CreateCampaign, LockRoster, Settle, Dispute, Release, PostReceipts, Claim, Sweep. States: OPEN, SETTLED, DISPUTED, SETTLED_FINAL, RELEASED, RECEIPTED, REFUNDED, CLOSED. The `.so` is about 41 KB, `no_std`, with no allocator and no Borsh.
+- **Per-farmer claims:** Release reserves `units x payout` in the vault, and each farmer pulls their own share with a merkle proof against the sealed roster. A claim-receipt PDA per (campaign, index) makes a replay fail with `AlreadyClaimed`. This replaced the lump-sum payment to a single disburser key after our own audit rated that P0.
+- **Two keys to settle:** every Settle needs the operator plus an independent oracle key, and a re-settle after a dispute also needs the auditor. An unresolved dispute refunds the sponsor after 14 days, and anything unclaimed after 90 days can be swept back.
+- **Tests:** 9 unit tests on the state machine and merkle code, and 7 LiteSVM integration tests that load the built `.so` and run real SPL Token CPIs, covering double claims, wrong signers, out-of-order calls, dispute timing, sweep and a pre-funded receipt PDA. All 16 pass.
 - **Data pipeline:** Node scripts pull ERA5 daily precipitation, compute window totals and percentiles, and hash the raw response. Anyone can rerun them.
 - **Roster service:** registrations hashed (sha256) into a merkle tree; all nodes stored so proofs can be served. Receipts from payouts are rolled into a second merkle root.
 - **Frontend:** static landing page with a rainfall explorer for the four backtest districts, deployed on Vercel.
@@ -62,9 +66,12 @@ Sponsors pay a platform fee on locked campaign funds (planned at 3-5%, not yet v
 ## Status
 
 - Done: 25-year, four-district backtest
-- Live: landing page
-- In progress: Solana program
-- Next: devnet campaign with sealed roster and replayable settle; BPS production validation
+- Done: landing page, live on Vercel and GitHub Pages
+- Done: Solana program written in Pinocchio, 16 passing tests, deployed to devnet, with a recorded end-to-end run (create, lock, settle, dispute, re-settle, release, two claims, rejected double claim)
+- Done: our own security review, 29 findings published, the four P0 items that touch the program fixed in the deployed build
+- Done: a devnet page that decodes the live campaign accounts and verifies each signature in the visitor's browser
+- In progress: recorded walkthrough, legal opinion, then one sponsor under a written grant agreement
+- Not done: external audit, fuzzing, compute-unit budgeting, Token-2022 support, and moving the upgrade authority to a multisig
 
 There are no sponsors, users or funds yet.
 

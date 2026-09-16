@@ -165,5 +165,5 @@ Campaign `3BF7hWtByRPUiPVqk5NkhQTo7Tx6Af1CA6jzcem1nxYh`, vault `3sFhPSbRNAefHpMZ
 - **Token-2022.** Not supported. Only the legacy SPL Token program is accepted.
 - **PostReceipts.** It only records a root. Nothing on-chain checks it.
 - **Review status.** No external audit, fuzzing or formal compute-unit budgeting has been done. The largest instruction, Claim, has not been profiled for compute units.
-- **Frontend and backend.** Nothing in `web/` is wired to this program yet.
+- **Frontend and backend.** `web/app.html` reads the campaign accounts, verifies the signatures above and can send a `Claim`. Nothing else is wired: there is no roster service, no WhatsApp registration and no payment-partner integration yet.
 - **pinocchio-kit.** It is not used by this program. Two compile errors in it were fixed (the `pinocchio-token` 0.7 type-alias generics and a test `unwrap_err` on a non-`Debug` type), and its `cargo test` now passes 7 tests.

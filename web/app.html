@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Siaga Tanam on devnet — NusaHarvest</title>
+<meta name="description" content="Read the live Siaga Tanam campaign accounts on Solana devnet, check the deployment transactions, and claim a grant with a Merkle proof.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121814" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f0e8;--ink:#17211b;--muted:#5c6660;--line:#d9d4c7;--card:#fbfaf6;--card2:#efebe0;--track:#e8e3d6;--green:#1f3d2b;--leaf:#2f6b45;--gold:#c9962e;--gold-text:#8a6415;--gold-soft:#f1e2bd;--red:#b5452f;--done-bg:#d6e7da;--shadow:#1f3d2b55}
+@media (prefers-color-scheme:dark){:root{--bg:#121814;--ink:#e9ece6;--muted:#a3ada6;--line:#2c3630;--card:#1a221d;--card2:#212a24;--track:#2c3630;--leaf:#7fbf92;--gold-text:#e8c36a;--gold-soft:#3a3120;--red:#e0775f;--done-bg:#23382a;--shadow:#00000088}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.skip{position:absolute;left:12px;top:-60px;background:var(--green);color:#fff;padding:10px 14px;border-radius:8px;z-index:20}
+.skip:focus{top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.02em;margin:0}
+.num{font-variant-numeric:tabular-nums}
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font:650 20px Fraunces,Georgia,serif;letter-spacing:-.02em;text-decoration:none}
+.brand img{width:32px;height:32px;display:block}
+.links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.links a{text-decoration:none}.links a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;flex-shrink:0}
+.lang button{border:0;background:none;font:600 12px Inter,sans-serif;padding:6px 12px;min-height:32px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--green);color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:10px;font:600 15px Inter,sans-serif;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;border:1px solid transparent;cursor:pointer;color:inherit;background:none}
+.btn.primary{background:var(--green);color:#fff}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px var(--green)}
+.btn.ghost{border-color:var(--line)}.btn.ghost:hover{background:var(--card)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.small{padding:8px 14px;font-size:13px}
+header.top{padding-block:56px 32px}
+header.top h1{font-size:clamp(32px,5vw,52px);line-height:1.06;margin:14px 0 18px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--leaf)}
+.lead{font-size:18px;color:var(--muted);max-width:60ch;margin:0}
+.idline{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;word-break:break-all}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;font-size:13px}
+.chip b{font-weight:600}
+section{padding-block:48px}
+.sec-head{max-width:680px;margin-bottom:28px}
+.sec-head h2{font-size:clamp(24px,3.4vw,34px);line-height:1.12;margin:10px 0 12px}
+.sec-head p{color:var(--muted);font-size:16px;margin:0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px}
+.camp h3{font-size:20px;margin:0 0 2px}
+.camp .sub{font-size:13px;color:var(--muted);margin-bottom:16px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;margin:0}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:600;background:var(--card2);color:var(--muted)}
+.tag.paid{background:var(--gold-soft);color:var(--gold-text)}
+.tag.live{background:var(--done-bg);color:var(--leaf)}
+table.tx{width:100%;border-collapse:collapse;font-size:14px}
+table.tx th,table.tx td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.tx th{font-weight:600;color:var(--muted);font-size:13px}
+table.tx td.s{width:1%;white-space:nowrap}
+.tx-wrap{overflow-x:auto}
+.ok{color:var(--leaf);font-weight:600}
+.bad{color:var(--red);font-weight:600}
+.wait{color:var(--muted)}
+textarea{width:100%;min-height:120px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);padding:12px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;resize:vertical}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;align-items:center}
+.msg{margin-top:14px;font-size:14px;padding:12px 14px;border-radius:10px;background:var(--card2)}
+.msg.err{background:var(--gold-soft);color:var(--gold-text)}
+.note{font-size:13px;color:var(--muted)}
+.empty{font-size:14px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:32px;margin-top:40px}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted)}
+@media (max-width:860px){.links{display:none}header.top{padding-block:32px 16px}section{padding-block:36px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" data-i="skip">Skip to content</a>
+<nav id="nav"><div class="wrap nav">
+  <a class="brand" href="index.html"><img src="brand/logo-mark.svg" alt="" width="32" height="32"><span>NusaHarvest</span></a>
+  <div class="links">
+    <a href="index.html#how" data-i="nav_how">How it works</a>
+    <a href="index.html#data" data-i="nav_data">The data</a>
+    <a href="#campaigns" data-i="nav_camp">Campaigns</a>
+    <a href="#proof" data-i="nav_proof">Proof</a>
+    <a href="#claim" data-i="nav_claim">Claim</a>
+  </div>
+  <div class="lang" role="group" aria-label="Language">
+    <button type="button" id="l-en" aria-pressed="true">EN</button>
+    <button type="button" id="l-id" aria-pressed="false">ID</button>
+  </div>
+</div></nav>
+
+<main id="main">
+<header class="top wrap">
+  <div class="eyebrow" data-i="eye">Live on Solana devnet</div>
+  <h1 data-i="h1">Read the program, not our word for it.</h1>
+  <p class="lead" data-i="lead">This page talks to Solana devnet from your browser. It reads every campaign account the program owns, checks the deployment and end-to-end transactions against the cluster, and lets a farmer wallet pull a grant with a Merkle proof. Test tokens only. No real money moves here.</p>
+  <div class="idline">
+    <span class="chip"><b data-i="pid">Program</b> <code id="pid">…</code></span>
+    <a class="btn ghost small" id="pid-link" href="#" target="_blank" rel="noopener" data-i="open_ex">Open in explorer</a>
+    <span class="chip" id="rpc-chip"><b data-i="rpc">RPC</b> <span id="rpc-state" class="wait" data-i="connecting">connecting…</span></span>
+  </div>
+</header>
+
+<section class="wrap" id="campaigns" aria-labelledby="c_h">
+  <div class="sec-head">
+    <div class="eyebrow" data-i="c_eye">Campaign accounts</div>
+    <h2 id="c_h" data-i="c_h">Every season the program holds, decoded live.</h2>
+    <p data-i="c_p">Fetched with getProgramAccounts and decoded from the 368-byte layout in program/src/state.rs. No wallet needed. Rainfall is stored in tenths of a millimetre.</p>
+  </div>
+  <div id="camps" class="grid"><p class="empty" data-i="c_load">Loading campaign accounts from devnet…</p></div>
+  <div class="row"><button type="button" class="btn ghost small" id="refresh" data-i="refresh">Refresh</button></div>
+</section>
+
+<section class="wrap" id="proof" aria-labelledby="p_h">
+  <div class="sec-head">
+    <div class="eyebrow" data-i="p_eye">Transaction proof</div>
+    <h2 id="p_h" data-i="p_h">The end-to-end run, checked against the cluster.</h2>
+    <p data-i="p_p">These signatures come from the devnet run recorded in program/README.md. Your browser asks devnet for each one and shows the slot and confirmation status it gets back.</p>
+  </div>
+  <div class="card tx-wrap">
+    <table class="tx"><thead><tr>
+      <th data-i="th_step">Step</th><th data-i="th_sig">Signature</th><th data-i="th_slot">Slot</th><th data-i="th_state">Status</th>
+    </tr></thead><tbody id="txrows"></tbody></table>
+  </div>
+</section>
+
+<section class="wrap" id="claim" aria-labelledby="w_h">
+  <div class="sec-head">
+    <div class="eyebrow" data-i="w_eye">Farmer claim</div>
+    <h2 id="w_h" data-i="w_h">Claim a grant with a Merkle proof.</h2>
+    <p data-i="w_p">In the real product a farmer never opens this. Rupiah reaches their e-wallet through a licensed payment partner. This page exists so anyone can verify that the on-chain path works without trusting a screenshot.</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h3 data-i="w_h3">Wallet</h3>
+      <p class="note" id="w-detect" data-i="w_detect">Looking for a Solana wallet in this browser…</p>
+      <div class="row">
+        <button type="button" class="btn primary" id="connect" data-i="w_btn">Connect wallet</button>
+        <button type="button" class="btn ghost small" id="disconnect" hidden data-i="w_dis">Disconnect</button>
+      </div>
+      <dl class="kv" id="w-info" hidden style="margin-top:16px">
+        <dt data-i="w_addr">Address</dt><dd><code id="w-addr"></code></dd>
+        <dt data-i="w_bal">Devnet SOL</dt><dd><span id="w-bal" class="num">–</span></dd>
+      </dl>
+      <p class="note" style="margin-top:14px" data-i="w_warn">Devnet only. Switch your wallet to devnet before you connect, or the transaction will be sent to the wrong cluster.</p>
+    </div>
+    <div class="card">
+      <h3 data-i="w_h4">Proof file</h3>
+      <p class="note" data-i="w_p4">Paste the JSON the roster tool gives a farmer: campaign address, their index, and the sibling hashes.</p>
+      <textarea id="proofin" spellcheck="false" aria-label="Merkle proof JSON" placeholder='{"campaign":"3BF7…","index":0,"proof":["a1b2…"]}'></textarea>
+      <div class="row">
+        <button type="button" class="btn primary" id="doclaim" disabled data-i="w_claim">Send claim</button>
+        <button type="button" class="btn ghost small" id="checkonly" disabled data-i="w_check">Check my proof first</button>
+      </div>
+      <div class="msg" id="claimmsg" hidden></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <span data-i="foot">Devnet with test tokens. A real-money pilot needs a written grant agreement and a legal opinion first.</span>
+  <a href="index.html" data-i="back">Back to the overview</a>
+</div></footer>
+
+<script type="module">
+import {Connection,PublicKey,Transaction,TransactionInstruction,SystemProgram} from "https://cdn.jsdelivr.net/npm/@solana/web3.js@1.95.8/+esm";
+
+const PROGRAM_ID="GeCxWiK9HXEuEsueNQawDKZnwE1SkojPw9dtYLBkcGBX";
+const RPC="https://api.devnet.solana.com";
+const TOKEN_PROGRAM=new PublicKey("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA");
+const PID=new PublicKey(PROGRAM_ID);
+const conn=new Connection(RPC,"confirmed");
+const ex=(kind,v)=>`https://explorer.solana.com/${kind}/${v}?cluster=devnet`;
+const short=s=>s.slice(0,6)+"…"+s.slice(-6);
+const $=id=>document.getElementById(id);
+
+const TX=[
+ ["Deploy","2WvXPRME3EvFx93Mu1pyB5BpBtewFEnG68LWebbgvwxMrLyqTqVvL9E8qUyHrNzs5jfGGemuo2zm1RACPzbykokY"],
+ ["Upgrade","5aBFMyvdSJFyfxfkszMHAMW4mxF7o2eH1dkJpvyK7vcwaTfaYLNE5gbcibwNSqDtpzkvAQj9Z9osGMFG86EcSF5s"],
+ ["CreateCampaign","32VQGHQuKM1FfD5iuneYzHs7fx2H2e78pXoZbEGxBLijHugMEpYqAm84YcgBmMY8Xxg3744W8JT1wbxpF58SupV6"],
+ ["LockRoster","4P4fkBkR1gSEckH8ze5BHeXZgtRY6NepNDa8Q2WqjsBp3MbvfhEHaC9Te35wBXV89bExAc9sVgXTSTdW55i77CLz"],
+ ["Settle (55.0 mm)","5uGx8k1h97i6mNS3TuxfkT3eWCvdCbRZ7Q1eNpT8Ndy2p9oVEgVyLdbwhgNGF6HMAXLPREzPYyeKhoj2sCJw76xo"],
+ ["Dispute","hwJrqWj4rDwDvyHv3sDjD3ijBJ2rKyUkXzDqbL9zjVsYaCsuGyBNkoELK1gVc9STBwhmFcFoM1bfFD5ZVwzRN11"],
+ ["Settle final","5XZgLUSbagLhg7Jw4bt425PmYwNWVnjxRgWgM42Ev9gbQhAnbhrDXpTVherDVB2r9SgTg71irozCxoKc7UbAiYtg"],
+ ["Release","XkDrdA3pxUbjKukybXa2P8nLWL6ZKAtuqiu98zrKiJsBpTPEZDGMkEojYyyqxUR45xK56iY4wdNtfhsVfMragBM"],
+ ["Claim farmer 0","5LBGkfwDSGa533Qxk5wfTBjjbvoorTvKRoPEew1p675ye4odnaw7jB1vjhCgSFwVrLGCiWFbCeTbY4k9FaF969aZ"],
+ ["Claim farmer 1","2tTc6efgKdFDET5jQDKn98NWth6qrkBexdM595hn3TdaKd4WZGnxiyubkKpzKVwiuoZEpAC2X1h772qQe22uoR4g"]
+];
+
+// ---- campaign layout (program/src/state.rs) ----
+const OFF={TAG:0,BUMP:1,STATUS:2,FLAGS:3,VAULT_BUMP:4,UNITS:8,CAMPAIGN_ID:16,SPONSOR:24,OPERATOR:56,AUDITOR:88,ORACLE:120,MINT:152,FREEZE:184,WINDOW_END:192,SETTLED:200,AMT_FULL:208,AMT_HALF:216,THR_FULL:224,THR_HALF:228,OBSERVED:232,ROSTER_ROOT:272};
+const STATUS=["OPEN","SETTLED","DISPUTED","SETTLED_FINAL","RELEASED","RECEIPTED","REFUNDED","CLOSED"];
+const OUTCOME=["NONE","HALF","FULL"];
+const dv=b=>new DataView(b.buffer,b.byteOffset,b.byteLength);
+function decode(d){
+ const v=dv(d),pk=o=>new PublicKey(d.slice(o,o+32)).toBase58();
+ const flags=d[OFF.FLAGS];
+ return{
+  status:STATUS[d[OFF.STATUS]]||"?",outcome:OUTCOME[(flags>>1)&3]||"?",pledge:(flags&1)===1,
+  units:v.getUint32(OFF.UNITS,true),id:v.getBigUint64(OFF.CAMPAIGN_ID,true),
+  sponsor:pk(OFF.SPONSOR),operator:pk(OFF.OPERATOR),oracle:pk(OFF.ORACLE),auditor:pk(OFF.AUDITOR),mint:pk(OFF.MINT),
+  windowEnd:Number(v.getBigInt64(OFF.WINDOW_END,true)),settledTs:Number(v.getBigInt64(OFF.SETTLED,true)),
+  amountFull:v.getBigUint64(OFF.AMT_FULL,true),amountHalf:v.getBigUint64(OFF.AMT_HALF,true),
+  thrFull:v.getInt32(OFF.THR_FULL,true),thrHalf:v.getInt32(OFF.THR_HALF,true),observed:v.getInt32(OFF.OBSERVED,true),
+  rosterRoot:Array.from(d.slice(OFF.ROSTER_ROOT,OFF.ROSTER_ROOT+32)).map(x=>x.toString(16).padStart(2,"0")).join("")
+ };
+}
+const mm=t=>(t/10).toFixed(1)+" mm";
+const dstr=s=>s>0?new Date(s*1000).toISOString().slice(0,10):"—";
+
+let CAMPS=[];
+async function loadCampaigns(){
+ const box=$("camps");
+ box.innerHTML=`<p class="empty">${t("c_load")}</p>`;
+ try{
+  const accs=await conn.getProgramAccounts(PID,{filters:[{dataSize:368}]});
+  $("rpc-state").textContent="devnet, connected";$("rpc-state").className="ok";
+  CAMPS=accs.map(a=>({addr:a.pubkey.toBase58(),...decode(a.account.data)}));
+  if(!CAMPS.length){box.innerHTML=`<p class="empty">${t("c_none")}</p>`;return}
+  const vaults=await Promise.all(CAMPS.map(async c=>{
+   const [v]=PublicKey.findProgramAddressSync([new TextEncoder().encode("vault"),new PublicKey(c.addr).toBytes()],PID);
+   try{const bal=await conn.getTokenAccountBalance(v);return{v:v.toBase58(),amt:bal.value.uiAmountString}}
+   catch(e){return{v:v.toBase58(),amt:null}}
+  }));
+  box.innerHTML=CAMPS.map((c,i)=>card(c,vaults[i])).join("");
+ }catch(e){
+  $("rpc-state").textContent="unreachable";$("rpc-state").className="bad";
+  box.innerHTML=`<p class="empty">${t("c_err")} <code>${String(e.message||e)}</code></p>`;
+ }
+}
+function card(c,v){
+ const cls=c.status==="RELEASED"||c.status==="RECEIPTED"?"paid":c.status==="OPEN"?"live":"";
+ const paid=c.outcome==="FULL"?c.amountFull:c.outcome==="HALF"?c.amountHalf:0n;
+ return `<article class="card camp">
+  <h3>${t("camp_h")} #${c.id}</h3>
+  <p class="sub"><a href="${ex("address",c.addr)}" target="_blank" rel="noopener"><code>${short(c.addr)}</code></a>
+   &nbsp;<span class="tag ${cls}">${c.status}</span> <span class="tag">${t("out")}: ${c.outcome}</span></p>
+  <dl class="kv">
+   <dt>${t("k_units")}</dt><dd class="num">${c.units}</dd>
+   <dt>${t("k_obs")}</dt><dd class="num">${c.settledTs>0?mm(c.observed):"—"}</dd>
+   <dt>${t("k_full")}</dt><dd class="num">${mm(c.thrFull)}</dd>
+   <dt>${t("k_half")}</dt><dd class="num">${mm(c.thrHalf)}</dd>
+   <dt>${t("k_pay")}</dt><dd class="num">${(Number(paid)/1e6).toFixed(2)}</dd>
+   <dt>${t("k_win")}</dt><dd class="num">${dstr(c.windowEnd)}</dd>
+   <dt>${t("k_settled")}</dt><dd class="num">${dstr(c.settledTs)}</dd>
+   <dt>${t("k_vault")}</dt><dd class="num">${v.amt===null?t("k_closed"):v.amt}</dd>
+   <dt>${t("k_sponsor")}</dt><dd><a href="${ex("address",c.sponsor)}" target="_blank" rel="noopener"><code>${short(c.sponsor)}</code></a></dd>
+   <dt>${t("k_mint")}</dt><dd><a href="${ex("address",c.mint)}" target="_blank" rel="noopener"><code>${short(c.mint)}</code></a></dd>
+  </dl></article>`;
+}
+
+// ---- transaction proof ----
+function txRows(){
+ $("txrows").innerHTML=TX.map(([n,s],i)=>`<tr>
+  <td>${n}</td>
+  <td class="s"><a href="${ex("tx",s)}" target="_blank" rel="noopener"><code>${short(s)}</code></a></td>
+  <td class="num" id="slot${i}">—</td>
+  <td id="st${i}" class="wait">${t("checking")}</td></tr>`).join("");
+}
+async function checkTx(){
+ const sigs=TX.map(t=>t[1]);
+ let res=[];
+ try{res=(await conn.getSignatureStatuses(sigs,{searchTransactionHistory:true})).value}
+ catch(e){res=sigs.map(()=>null)}
+ res.forEach((r,i)=>{
+  const st=$("st"+i);
+  if(r&&!r.err){st.textContent=r.confirmationStatus||"confirmed";st.className="ok";$("slot"+i).textContent=r.slot.toLocaleString("en-US")}
+  else if(r&&r.err){st.textContent=t("failed");st.className="bad"}
+  else{st.textContent=t("notfound");st.className="wait"}
+ });
+}
+
+// ---- wallet ----
+let wallet=null,pubkey=null;
+function provider(){
+ const w=window;
+ if(w.solana&&w.solana.isPhantom)return w.solana;
+ if(w.solflare&&w.solflare.isSolflare)return w.solflare;
+ if(w.phantom&&w.phantom.solana)return w.phantom.solana;
+ return w.solana||null;
+}
+function detect(){
+ const p=provider();
+ $("w-detect").textContent=p?t("w_found"):t("w_none");
+ $("connect").disabled=!p;
+}
+async function connect(){
+ const p=provider();if(!p)return;
+ try{
+  const r=await p.connect();
+  wallet=p;pubkey=new PublicKey((r&&r.publicKey||p.publicKey).toString());
+  $("w-addr").textContent=pubkey.toBase58();
+  $("w-info").hidden=false;$("disconnect").hidden=false;$("connect").hidden=true;
+  $("doclaim").disabled=false;$("checkonly").disabled=false;
+  const lam=await conn.getBalance(pubkey);
+  $("w-bal").textContent=(lam/1e9).toFixed(4);
+  if(lam===0)say(t("w_zero"),true);
+ }catch(e){say(msgOf(e),true)}
+}
+function disconnect(){
+ try{wallet&&wallet.disconnect&&wallet.disconnect()}catch(e){}
+ wallet=null;pubkey=null;
+ $("w-info").hidden=true;$("disconnect").hidden=true;$("connect").hidden=false;
+ $("doclaim").disabled=true;$("checkonly").disabled=true;
+}
+const msgOf=e=>String((e&&(e.message||e.toString()))||e);
+function say(html,warn){const m=$("claimmsg");m.hidden=false;m.className="msg"+(warn?" err":"");m.innerHTML=html}
+
+// ---- merkle (matches program/src/merkle.rs) ----
+const te=new TextEncoder();
+async function sha(...parts){
+ let len=0;parts.forEach(p=>len+=p.length);
+ const b=new Uint8Array(len);let o=0;parts.forEach(p=>{b.set(p,o);o+=p.length});
+ return new Uint8Array(await crypto.subtle.digest("SHA-256",b));
+}
+const le4=n=>new Uint8Array([n&255,(n>>8)&255,(n>>16)&255,(n>>24)&255]);
+function cmp(a,b){for(let i=0;i<32;i++){if(a[i]!==b[i])return a[i]<b[i]?-1:1}return 0}
+async function leafOf(campaign,farmer,index){return sha(te.encode("NH1"),campaign.toBytes(),farmer.toBytes(),le4(index))}
+async function rootOf(leaf,proof){
+ let h=leaf;
+ for(const p of proof){h=cmp(h,p)<=0?await sha(te.encode("NHN"),h,p):await sha(te.encode("NHN"),p,h)}
+ return h;
+}
+const hex=b=>Array.from(b).map(x=>x.toString(16).padStart(2,"0")).join("");
+function unhex(s){s=s.replace(/^0x/,"");const o=new Uint8Array(s.length/2);for(let i=0;i<o.length;i++)o[i]=parseInt(s.substr(i*2,2),16);return o}
+
+function readProof(){
+ const raw=$("proofin").value.trim();
+ if(!raw)throw new Error(t("e_empty"));
+ const j=JSON.parse(raw);
+ if(!j.campaign||j.index===undefined||!Array.isArray(j.proof))throw new Error(t("e_shape"));
+ const proof=j.proof.map(p=>{const b=unhex(p);if(b.length!==32)throw new Error(t("e_node"));return b});
+ if(proof.length>24)throw new Error(t("e_long"));
+ return{campaign:new PublicKey(j.campaign),index:Number(j.index),proof};
+}
+async function verifyProof(){
+ try{
+  const{campaign,index,proof}=readProof();
+  const c=CAMPS.find(x=>x.addr===campaign.toBase58());
+  if(!c)throw new Error(t("e_nocamp"));
+  const leaf=await leafOf(campaign,pubkey,index);
+  const root=await rootOf(leaf,proof);
+  if(hex(root)!==c.rosterRoot)return say(t("e_notroster"),true);
+  const[receipt]=PublicKey.findProgramAddressSync([te.encode("claim"),campaign.toBytes(),le4(index)],PID);
+  const info=await conn.getAccountInfo(receipt);
+  if(info)return say(t("e_claimed"),true);
+  if(c.status!=="RELEASED"&&c.status!=="RECEIPTED")return say(t("e_status").replace("%s",c.status),true);
+  say(t("ok_proof"));
+ }catch(e){say(msgOf(e),true)}
+}
+async function sendClaim(){
+ if(!pubkey)return;
+ try{
+  const{campaign,index,proof}=readProof();
+  const c=CAMPS.find(x=>x.addr===campaign.toBase58());
+  if(!c)throw new Error(t("e_nocamp"));
+  const leaf=await leafOf(campaign,pubkey,index);
+  if(hex(await rootOf(leaf,proof))!==c.rosterRoot)return say(t("e_notroster"),true);
+  const[vault]=PublicKey.findProgramAddressSync([te.encode("vault"),campaign.toBytes()],PID);
+  const[receipt]=PublicKey.findProgramAddressSync([te.encode("claim"),campaign.toBytes(),le4(index)],PID);
+  const toks=await conn.getTokenAccountsByOwner(pubkey,{mint:new PublicKey(c.mint)});
+  if(!toks.value.length)throw new Error(t("e_notoken"));
+  const farmerToken=toks.value[0].pubkey;
+  const data=new Uint8Array(5+proof.length*32);
+  data[0]=6;data.set(le4(index),1);
+  proof.forEach((p,i)=>data.set(p,5+i*32));
+  const ix=new TransactionInstruction({programId:PID,data,keys:[
+   {pubkey,isSigner:true,isWritable:true},
+   {pubkey:campaign,isSigner:false,isWritable:false},
+   {pubkey:vault,isSigner:false,isWritable:true},
+   {pubkey:farmerToken,isSigner:false,isWritable:true},
+   {pubkey:receipt,isSigner:false,isWritable:true},
+   {pubkey:SystemProgram.programId,isSigner:false,isWritable:false},
+   {pubkey:TOKEN_PROGRAM,isSigner:false,isWritable:false}]});
+  const tx=new Transaction().add(ix);
+  tx.feePayer=pubkey;
+  tx.recentBlockhash=(await conn.getLatestBlockhash()).blockhash;
+  say(t("sending"));
+  const signed=await wallet.signTransaction(tx);
+  const sig=await conn.sendRawTransaction(signed.serialize());
+  await conn.confirmTransaction(sig,"confirmed");
+  say(t("ok_claim")+` <a href="${ex("tx",sig)}" target="_blank" rel="noopener"><code>${short(sig)}</code></a>`);
+  loadCampaigns();
+ }catch(e){say(msgOf(e),true)}
+}
+
+// ---- language ----
+const T={id:{
+ skip:"Lewati ke konten",nav_how:"Cara kerja",nav_data:"Data",nav_camp:"Kampanye",nav_proof:"Bukti",nav_claim:"Klaim",
+ eye:"Berjalan di Solana devnet",
+ h1:"Baca sendiri programnya, jangan percaya kata kami.",
+ lead:"Halaman ini berbicara langsung ke Solana devnet dari browser Anda. Ia membaca setiap akun kampanye milik program, mencocokkan transaksi deploy dan uji ujung-ke-ujung dengan cluster, lalu memungkinkan dompet petani menarik hibah dengan bukti Merkle. Hanya token uji. Tidak ada uang sungguhan di sini.",
+ pid:"Program",rpc:"RPC",connecting:"menghubungkan…",open_ex:"Buka di explorer",
+ c_eye:"Akun kampanye",c_h:"Setiap musim yang dipegang program, dibaca langsung.",
+ c_p:"Diambil dengan getProgramAccounts dan dibaca dari tata letak 368 byte di program/src/state.rs. Tidak perlu dompet. Curah hujan disimpan dalam sepersepuluh milimeter.",
+ c_load:"Memuat akun kampanye dari devnet…",c_none:"Program belum memegang akun kampanye di devnet.",
+ c_err:"Devnet tidak bisa dihubungi:",refresh:"Muat ulang",
+ camp_h:"Kampanye",out:"hasil",
+ k_units:"Petani terdaftar",k_obs:"Curah hujan tercatat",k_full:"Batas penuh (p10)",k_half:"Batas separuh (p20)",
+ k_pay:"Hibah per petani",k_win:"Jendela musim ditutup",k_settled:"Diselesaikan",k_vault:"Saldo escrow",k_closed:"ditutup",
+ k_sponsor:"Sponsor",k_mint:"Mint token",
+ p_eye:"Bukti transaksi",p_h:"Uji ujung-ke-ujung, dicocokkan dengan cluster.",
+ p_p:"Tanda tangan ini berasal dari uji devnet yang dicatat di program/README.md. Browser Anda menanyakan tiap tanda tangan ke devnet dan menampilkan slot serta status yang dijawab.",
+ th_step:"Langkah",th_sig:"Tanda tangan",th_slot:"Slot",th_state:"Status",
+ checking:"memeriksa…",failed:"gagal",notfound:"tidak ditemukan",
+ w_eye:"Klaim petani",w_h:"Tarik hibah dengan bukti Merkle.",
+ w_p:"Pada produk sungguhan petani tidak pernah membuka halaman ini. Rupiah sampai ke dompet digitalnya lewat mitra pembayaran berizin. Halaman ini ada supaya siapa pun bisa memastikan jalur on-chain benar-benar jalan, bukan sekadar tangkapan layar.",
+ w_h3:"Dompet",w_detect:"Mencari dompet Solana di browser ini…",w_btn:"Hubungkan dompet",w_dis:"Putuskan",
+ w_addr:"Alamat",w_bal:"SOL devnet",
+ w_warn:"Devnet saja. Pindahkan dompet Anda ke devnet sebelum menghubungkan, kalau tidak transaksi akan dikirim ke cluster yang salah.",
+ w_found:"Dompet Solana terdeteksi.",w_none:"Tidak ada dompet Solana di browser ini. Pasang Phantom atau Solflare untuk mencoba klaim.",
+ w_zero:"Dompet ini tidak punya SOL devnet, jadi tidak bisa membayar biaya transaksi. Minta airdrop devnet lebih dulu.",
+ w_h4:"Berkas bukti",w_p4:"Tempel JSON yang diberikan alat roster kepada petani: alamat kampanye, indeksnya, dan hash saudara.",
+ w_claim:"Kirim klaim",w_check:"Periksa bukti dulu",
+ e_empty:"Tempel dulu JSON buktinya.",e_shape:"JSON harus berisi campaign, index dan proof.",
+ e_node:"Setiap simpul bukti harus 32 byte dalam heksadesimal.",e_long:"Bukti terlalu panjang; program menerima paling banyak 24 simpul.",
+ e_nocamp:"Kampanye itu tidak ada di devnet untuk program ini.",
+ e_notroster:"Bukti ini tidak cocok dengan roster kampanye untuk dompet yang terhubung. Dompet Anda tidak terdaftar di musim itu.",
+ e_claimed:"Indeks itu sudah diklaim. Tanda terimanya sudah ada di rantai.",
+ e_status:"Kampanye berstatus %s. Klaim baru terbuka setelah Release.",
+ e_notoken:"Dompet ini belum punya akun token untuk mint kampanye tersebut.",
+ ok_proof:"Bukti cocok dengan roster, dan indeks ini belum diklaim. Klaim bisa dikirim.",
+ sending:"Menunggu tanda tangan dompet…",ok_claim:"Klaim berhasil.",
+ foot:"Devnet dengan token uji. Pilot uang sungguhan perlu perjanjian hibah tertulis dan opini hukum lebih dulu.",
+ back:"Kembali ke ringkasan"
+}};
+const EN={};document.querySelectorAll("[data-i]").forEach(e=>{if(!(e.dataset.i in EN))EN[e.dataset.i]=e.innerHTML});
+Object.keys(T.id).forEach(k=>{if(!(k in EN))EN[k]=null});
+const FALLBACK={c_none:"The program holds no campaign accounts on devnet yet.",c_err:"Devnet could not be reached:",camp_h:"Campaign",out:"outcome",
+ k_units:"Farmers on roster",k_obs:"Observed rainfall",k_full:"Full floor (p10)",k_half:"Half floor (p20)",k_pay:"Grant per farmer",
+ k_win:"Season window closed",k_settled:"Settled",k_vault:"Escrow balance",k_closed:"closed",k_sponsor:"Sponsor",k_mint:"Token mint",
+ checking:"checking…",failed:"failed",notfound:"not found",
+ w_found:"A Solana wallet was detected.",w_none:"No Solana wallet in this browser. Install Phantom or Solflare to try a claim.",
+ w_zero:"This wallet holds no devnet SOL, so it cannot pay the transaction fee. Ask for a devnet airdrop first.",
+ e_empty:"Paste the proof JSON first.",e_shape:"The JSON needs campaign, index and proof.",
+ e_node:"Every proof node must be 32 bytes of hex.",e_long:"That proof is too long; the program accepts at most 24 nodes.",
+ e_nocamp:"That campaign does not exist on devnet for this program.",
+ e_notroster:"This proof does not match the campaign roster for the connected wallet. Your wallet is not on that season's roster.",
+ e_claimed:"That index has already been claimed. The receipt is on chain.",
+ e_status:"The campaign is %s. Claims only open after Release.",
+ e_notoken:"This wallet has no token account for that campaign's mint.",
+ ok_proof:"The proof matches the roster and this index is unclaimed. The claim can be sent.",
+ sending:"Waiting for the wallet signature…",ok_claim:"Claim confirmed."};
+Object.assign(EN,Object.fromEntries(Object.entries(FALLBACK).filter(([k])=>!EN[k])));
+let lang="en";
+const t=k=>lang==="id"?(T.id[k]??EN[k]??k):(EN[k]??k);
+function setLang(l){
+ lang=l;document.documentElement.lang=l;
+ document.querySelectorAll("[data-i]").forEach(e=>{const v=t(e.dataset.i);if(v!=null)e.innerHTML=v});
+ $("l-en").setAttribute("aria-pressed",String(l==="en"));
+ $("l-id").setAttribute("aria-pressed",String(l==="id"));
+ try{localStorage.setItem("nh-lang",l)}catch(e){}
+ txRows();checkTx();detect();
+ if(CAMPS.length)loadCampaigns();
+}
+$("l-en").onclick=()=>setLang("en");
+$("l-id").onclick=()=>setLang("id");
+
+// ---- boot ----
+$("pid").textContent=PROGRAM_ID;
+$("pid-link").href=ex("address",PROGRAM_ID);
+$("refresh").onclick=loadCampaigns;
+$("connect").onclick=connect;
+$("disconnect").onclick=disconnect;
+$("checkonly").onclick=verifyProof;
+$("doclaim").onclick=sendClaim;
+let saved="en";try{saved=localStorage.getItem("nh-lang")||"en"}catch(e){}
+setLang(saved==="id"?"id":"en");
+setTimeout(detect,600);
+loadCampaigns();
+</script>
+</body>
+</html>

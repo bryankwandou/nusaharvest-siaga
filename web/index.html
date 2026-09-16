@@ -170,6 +170,7 @@ footer img{height:28px;width:auto;display:block}
     <a href="#payout" data-i="nav_payout">Grant payout</a>
     <a href="#data" data-i="nav_data">The data</a>
     <a href="#roadmap" data-i="nav_status">Build status</a>
+    <a href="app.html" data-i="nav_app">Live on devnet</a>
   </div>
   <div class="lang" role="group" aria-label="Language / Bahasa">
     <button type="button" data-lang="en" aria-pressed="true">EN</button>
@@ -283,23 +284,23 @@ footer img{height:28px;width:auto;display:block}
 <section class="wrap" id="wallet" aria-labelledby="wl_h">
   <div class="sec-head reveal">
     <div class="eyebrow" data-i="wl_eye">Wallet</div>
-    <h2 id="wl_h" data-i="wl_h">No wallet to connect yet.</h2>
-    <p data-i="wl_p">The Solana program is still being built on devnet. Until it is deployed and tested, this page will not ask you to connect or sign anything, and it will not show balances.</p>
+    <h2 id="wl_h" data-i="wl_h">The program is live on devnet. Go and read it.</h2>
+    <p data-i="wl_p">Program <code>GeCxWiK9HXEuEsueNQawDKZnwE1SkojPw9dtYLBkcGBX</code> is deployed on Solana devnet. The devnet page reads every campaign account straight from the cluster and checks our end-to-end run signature by signature, with no wallet needed. Test tokens only.</p>
   </div>
   <div class="wallet">
     <div class="wallet-card reveal">
-      <span class="pill" data-i="wl_pill">Devnet program in progress</span>
-      <h3 data-i="wl_h3">What the wallet will be for</h3>
+      <span class="pill" data-i="wl_pill">Devnet program live</span>
+      <h3 data-i="wl_h3">What the wallet is for</h3>
       <ul>
-        <li data-i="wl_li1">Sponsors lock their own funds in an escrow they can inspect, on devnet first.</li>
-        <li data-i="wl_li2">Anyone can open a settled season and check the rule, the rainfall and each disbursement.</li>
+        <li data-i="wl_li1">Sponsors lock their own funds in an escrow anyone can inspect. On devnet today, with test tokens.</li>
+        <li data-i="wl_li2">Anyone can open a settled season and check the rule, the rainfall and each disbursement. That page is live now.</li>
         <li data-i="wl_li3">Farmers never touch crypto. Rupiah reaches their e-wallet through a licensed payment provider, and NusaHarvest never holds the funds.</li>
       </ul>
     </div>
     <div class="wallet-card reveal">
-      <h3 data-i="wl_h3b">Connect wallet</h3>
-      <p data-i="wl_p2">Disabled until the devnet program is live.</p>
-      <button type="button" class="btn primary" disabled aria-describedby="detect" data-i="wl_btn">Connect wallet</button>
+      <h3 data-i="wl_h3b">Open the devnet page</h3>
+      <p data-i="wl_p2">Campaign accounts, transaction proof and a farmer claim, all against devnet.</p>
+      <a class="btn primary" href="app.html" aria-describedby="detect" data-i="wl_btn">Open the devnet page</a>
       <div class="detect" id="detect" data-i="wl_none">Checking for a Solana wallet in this browser.</div>
     </div>
   </div>
@@ -332,9 +333,9 @@ footer img{height:28px;width:auto;display:block}
   </div>
   <div class="status-grid">
     <div class="phase done reveal"><em data-i="done">Done</em><h3 data-i="ph1">Research and backtest</h3><p data-i="ph1p">25 years of rainfall across four districts, thresholds calibrated.</p></div>
-    <div class="phase now reveal"><em data-i="now">In progress</em><h3 data-i="ph2">Solana program</h3><p data-i="ph2p">Campaign, settle and disbursement instructions on devnet, test tokens only.</p></div>
-    <div class="phase reveal"><em data-i="next">Next</em><h3 data-i="ph3">Security review</h3><p data-i="ph3p">Tests, review and published findings.</p></div>
-    <div class="phase reveal"><em data-i="next">Next</em><h3 data-i="ph4">Pilot and walkthrough</h3><p data-i="ph4p">Recorded demo, legal opinion, then one sponsor under a written grant agreement.</p></div>
+    <div class="phase done reveal"><em data-i="done">Done</em><h3 data-i="ph2">Solana program</h3><p data-i="ph2p">Deployed on devnet in Pinocchio. Campaign, settle, dispute, release, claim and sweep, with 16 passing tests and a recorded end-to-end run.</p></div>
+    <div class="phase done reveal"><em data-i="done">Done</em><h3 data-i="ph3">Security review</h3><p data-i="ph3p">29 findings published, including nine rated P0. The four that touch the program are fixed in the deployed build.</p></div>
+    <div class="phase now reveal"><em data-i="now">In progress</em><h3 data-i="ph4">Pilot and walkthrough</h3><p data-i="ph4p">Recorded demo, legal opinion, then one sponsor under a written grant agreement.</p></div>
   </div>
 </section>
 </main>
@@ -355,7 +356,7 @@ const DATA={
 };
 const T={id:{
  skip:"Lewati ke konten",
- nav_how:"Cara kerja",nav_payout:"Pencairan hibah",nav_data:"Data",nav_status:"Status",
+ nav_how:"Cara kerja",nav_payout:"Pencairan hibah",nav_data:"Data",nav_status:"Status",nav_app:"Jalan di devnet",
  eyebrow:"Siaga Tanam · hibah bersyarat dari sponsor",
  h1:"Uang datang <em>sebelum</em> panen gagal.",
  lead:"Sponsor mengunci dananya sendiri sebelum musim dengan satu aturan terbuka: kalau curah hujan di bawah batas kabupaten, hibah dicairkan. Petani tidak membayar apa pun, kapan pun, dan menerima rupiah di dompet digitalnya.",
@@ -386,13 +387,13 @@ const T={id:{
  r2:"Yang menentukan",r2a:"Penilaian kerusakan di lahan",r2b:"Curah hujan musim dibanding batas terbuka",
  r3:"Kapan uang datang",r3a:"Setelah kerugian dinilai",r3b:"Beberapa hari setelah jendela musim ditutup",
  r4:"Siapa yang mendanai",r4a:"Subsidi pemerintah dengan bagian petani",r4b:"Dana sponsor sendiri. Petani tidak membayar apa pun",
- wl_eye:"Dompet",wl_h:"Belum ada dompet untuk dihubungkan.",
- wl_p:"Program Solana masih dibangun di devnet. Sampai program itu dirilis dan diuji, halaman ini tidak akan meminta Anda menghubungkan atau menandatangani apa pun, dan tidak menampilkan saldo.",
- wl_pill:"Program devnet sedang dikerjakan",wl_h3:"Untuk apa dompet nanti",
- wl_li1:"Sponsor mengunci dananya sendiri di escrow yang bisa diperiksa, lebih dulu di devnet.",
- wl_li2:"Siapa pun bisa membuka musim yang sudah diselesaikan dan mengecek aturan, curah hujan, dan setiap penyaluran.",
+ wl_eye:"Dompet",wl_h:"Programnya sudah jalan di devnet. Silakan baca sendiri.",
+ wl_p:"Program <code>GeCxWiK9HXEuEsueNQawDKZnwE1SkojPw9dtYLBkcGBX</code> sudah dirilis di Solana devnet. Halaman devnet membaca setiap akun kampanye langsung dari cluster dan memeriksa uji ujung-ke-ujung kami satu per satu, tanpa perlu dompet. Hanya token uji.",
+ wl_pill:"Program devnet sudah jalan",wl_h3:"Untuk apa dompet itu",
+ wl_li1:"Sponsor mengunci dananya sendiri di escrow yang bisa diperiksa siapa pun. Hari ini di devnet, dengan token uji.",
+ wl_li2:"Siapa pun bisa membuka musim yang sudah diselesaikan dan mengecek aturan, curah hujan, dan setiap penyaluran. Halaman itu sudah ada sekarang.",
  wl_li3:"Petani tidak pernah menyentuh kripto. Rupiah sampai ke dompet digital mereka lewat penyedia pembayaran berizin, dan NusaHarvest tidak pernah memegang dana.",
- wl_h3b:"Hubungkan dompet",wl_p2:"Dinonaktifkan sampai program devnet berjalan.",wl_btn:"Hubungkan dompet",
+ wl_h3b:"Buka halaman devnet",wl_p2:"Akun kampanye, bukti transaksi, dan klaim petani, semuanya langsung ke devnet.",wl_btn:"Buka halaman devnet",
  wl_none:"Tidak ada dompet Solana terdeteksi di browser ini. Belum perlu memasang apa pun.",
  wl_found:"Dompet Solana terdeteksi. Belum ada yang perlu ditandatangani, dan halaman ini tidak akan memintanya.",
  k_eye:"Status dan kepatuhan",k_h:"Apa yang nyata hari ini, dan bagaimana uang sungguhan akan bergerak.",
@@ -401,8 +402,8 @@ const T={id:{
  b_eye:"Status pembangunan",b_h:"Apa yang sudah jalan, dan apa yang belum.",b_p:"Kami lebih memilih daftar jujur daripada demo yang berpura-pura.",
  done:"Selesai",now:"Dikerjakan",next:"Berikutnya",
  ph1:"Riset dan uji mundur",ph1p:"Data hujan 25 tahun di empat kabupaten, batas sudah dikalibrasi.",
- ph2:"Program Solana",ph2p:"Instruksi kampanye, penyelesaian, dan penyaluran di devnet, hanya token uji.",
- ph3:"Tinjauan keamanan",ph3p:"Pengujian, review, dan temuan yang dipublikasikan.",
+ ph2:"Program Solana",ph2p:"Dirilis di devnet memakai Pinocchio. Kampanye, settle, sanggah, rilis, klaim, dan sapu, dengan 16 tes lulus dan satu uji ujung-ke-ujung yang tercatat.",
+ ph3:"Tinjauan keamanan",ph3p:"29 temuan dipublikasikan, sembilan di antaranya P0. Empat yang menyentuh program sudah diperbaiki di build yang dirilis.",
  ph4:"Pilot dan walkthrough",ph4p:"Video demo, opini hukum, lalu satu sponsor dengan perjanjian hibah tertulis.",
  foot:"Dibangun di Solana. Data hujan dari Open-Meteo.",
  hit:"cair",floor:"batas",above:"di atas batas",district:"Kabupaten"
