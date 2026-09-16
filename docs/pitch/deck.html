@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NusaHarvest Siaga Tanam</title>
+<style>
+:root{--green:#1f3d2b;--leaf:#2f6b45;--gold:#c9962e;--paper:#f3f0e8;--card:#fbfaf6;--ink:#17211b;--muted:#5c6660;--line:#d9d4c7;--red:#b5452f}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#111812;overflow:hidden;font-family:Inter,"Segoe UI",system-ui,sans-serif;color:var(--ink)}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center}
+.slide{position:absolute;inset:0;background:var(--paper);padding:80px 100px;display:none;flex-direction:column}
+.slide.on{display:flex}
+.slide.dark{background:var(--green);color:#eef2ec}
+h1,h2{font-family:Georgia,"Times New Roman",serif;font-weight:600;letter-spacing:-.02em;margin:0}
+h1{font-size:96px;line-height:1.02}
+h2{font-size:60px;line-height:1.08;margin-bottom:36px;max-width:1250px}
+.eyebrow{font-size:20px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:22px}
+p,li{font-size:28px;line-height:1.45}
+.muted{color:var(--muted)} .dark .muted{color:#b9c8bd}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:34px}
+.dark .card{background:#ffffff0d;border-color:#ffffff26}
+.card h3{font-family:Georgia,serif;font-size:32px;margin:0 0 12px;font-weight:600}
+.card p{font-size:23px;margin:0}
+.big{font-family:Georgia,serif;font-size:64px;color:var(--green);display:block;line-height:1}
+.dark .big{color:var(--gold)}
+.foot{position:absolute;left:100px;right:100px;bottom:36px;display:flex;justify-content:space-between;font-size:17px;color:var(--muted)}
+.dark .foot{color:#9fb3a5}
+.src{font-size:16px;color:var(--muted);margin-top:auto;padding-top:18px;line-height:1.5}
+.dark .src{color:#9fb3a5}
+.src a{color:inherit}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.step .n{font-size:20px;font-weight:700;color:var(--gold);letter-spacing:.1em}
+table{border-collapse:collapse;width:100%;font-size:23px}
+th,td{text-align:left;padding:14px 16px;border-bottom:2px solid var(--line)}
+th{font-size:18px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.dark th,.dark td{border-color:#ffffff26}
+.pill{display:inline-block;padding:6px 16px;border-radius:99px;font-size:18px;font-weight:700}
+.done{background:#2f6b4522;color:var(--leaf)} .wip{background:#c9962e2e;color:#8a6516} .next{background:#5c666022;color:var(--muted)}
+ul{margin:0;padding-left:30px}
+#hint{position:fixed;bottom:10px;right:14px;color:#8a9;font:13px system-ui}
+</style>
+</head>
+<body>
+<div id="stage">
+
+<!-- 1 Problem -->
+<section class="slide dark on">
+  <div class="eyebrow">NusaHarvest Siaga Tanam</div>
+  <h1 style="max-width:1200px">When the rain is late, planting money is late too.</h1>
+  <p class="muted" style="max-width:1100px;margin-top:36px">A smallholder rice farmer in Central Java plants when the October rains arrive. When they don't, seed and labour are already spent, and the fastest cash is a tengkulak advance paid back with a cheap harvest.</p>
+  <div class="grid3" style="margin-top:auto">
+    <div class="card"><span class="big">305k ha</span><p class="muted">covered by the subsidised AUTP crop scheme in 2024, against a 1 million ha target</p></div>
+    <div class="card"><span class="big">Rp1.8T</span><p class="muted">estimated yearly potential for agricultural cover that stays unreached</p></div>
+    <div class="card"><span class="big">Weeks</span><p class="muted">is what an indemnity claim takes. A late-rain shock needs money inside the planting window.</p></div>
+  </div>
+  <div class="src">Source: <a href="https://www.jawapos.com/bisnis/015807495/asuransi-pertanian-potensial-raup-rp-18-triliun-tapi-masih-terkendala-edukasi-petani">Jawa Pos, agricultural cover potential Rp1.8T and AUTP 2024 coverage</a></div>
+</section>
+
+<!-- 2 Coops -->
+<section class="slide">
+  <div class="eyebrow">Why intermediaries break</div>
+  <h2>Every layer between the funder and the farmer is a place money can stall or leak.</h2>
+  <div class="grid3">
+    <div class="card"><h3>Lending through middlemen</h3><p class="muted">TaniFund lent through intermediaries, ended with poor repayment and lost its OJK licence. Goldfinch lost about $18M to emerging-market lending partners.</p></div>
+    <div class="card"><h3>Lists change after the fact</h3><p class="muted">Aid fraud cases in Indonesia keep pointing at the same weak spots: who is on the list, and who actually got paid.</p></div>
+    <div class="card"><h3>Our own first version</h3><p class="muted">NusaHarvest V1 routed funds through cooperatives. No real money ever moved, and its 40mm/30-day trigger would have fired in 23 of 25 years.</p></div>
+  </div>
+  <p style="margin-top:40px"><b>Lesson:</b> remove the money intermediary. Extension workers can help farmers register, but they never hold funds.</p>
+  <div class="src">Sources: <a href="https://www.dlnews.com/articles/defi/goldfinch-borrower-lend-east-defaults-says-warbler-labs/">DL News, Goldfinch defaults</a> · <a href="https://www.antaranews.com/berita/5729580/kpk-panggil-mantan-kadinsos-jawa-timur-dan-26-saksi-kasus-bansos-beras">Antara, KPK bansos case</a> · V1 figure: research/data/backtest-*.csv</div>
+</section>
+
+<!-- 3 Solution -->
+<section class="slide">
+  <div class="eyebrow">The idea</div>
+  <h2>Sponsors commit planting support before the season. Rainfall decides, not a claims desk.</h2>
+  <div class="grid3">
+    <div class="card"><h3>Locked before</h3><p class="muted">A sponsor (CSR, zakat body, NGO, local government) locks USDC in a Solana vault before October.</p></div>
+    <div class="card"><h3>Sealed roster</h3><p class="muted">The farmer list is sealed as a merkle root before the season. Nobody can be added after a drought is visible.</p></div>
+    <div class="card"><h3>Public trigger</h3><p class="muted">Oct-Dec satellite rainfall below the district's own 20th percentile releases funds after a 48-hour dispute window.</p></div>
+  </div>
+  <p class="muted" style="margin-top:40px">Farmers pay nothing and file nothing. Registration is by phone number; no crypto wallet on their side.</p>
+</section>
+
+<!-- 4 How it works -->
+<section class="slide">
+  <div class="eyebrow">How it works</div>
+  <h2>Four steps, each one checkable by anyone.</h2>
+  <div class="steps">
+    <div class="card step"><div class="n">01 LOCK</div><h3>Fund the vault</h3><p class="muted">Sponsor deposits USDC into a campaign account with district, window and threshold fixed.</p></div>
+    <div class="card step"><div class="n">02 SEAL</div><h3>Freeze the roster</h3><p class="muted">Registrations are hashed into a merkle root and written on-chain at freeze time.</p></div>
+    <div class="card step"><div class="n">03 SETTLE</div><h3>Post the rainfall</h3><p class="muted">After Dec 31 the operator posts observed ERA5 millimetres plus a hash of the source data.</p></div>
+    <div class="card step"><div class="n">04 RELEASE</div><h3>Pay out</h3><p class="muted">An auditor has 48 hours to dispute. After that, anyone can call release.</p></div>
+  </div>
+  <svg viewBox="0 0 1400 120" style="width:100%;margin-top:40px" aria-label="state flow">
+    <g font-family="Inter,system-ui" font-size="22" font-weight="600" text-anchor="middle">
+      <rect x="0" y="30" width="200" height="60" rx="30" fill="#1f3d2b"/><text x="100" y="68" fill="#f3f0e8">OPEN</text>
+      <rect x="300" y="30" width="220" height="60" rx="30" fill="#1f3d2b"/><text x="410" y="68" fill="#f3f0e8">SETTLED</text>
+      <rect x="620" y="30" width="220" height="60" rx="30" fill="none" stroke="#b5452f" stroke-width="3"/><text x="730" y="68" fill="#b5452f">DISPUTED</text>
+      <rect x="940" y="30" width="220" height="60" rx="30" fill="#c9962e"/><text x="1050" y="68" fill="#17211b">RELEASED</text>
+      <rect x="1220" y="30" width="180" height="60" rx="30" fill="none" stroke="#5c6660" stroke-width="3"/><text x="1310" y="68" fill="#5c6660">RECEIPTED</text>
+    </g>
+    <g stroke="#5c6660" stroke-width="3" fill="none"><path d="M205 60H292"/><path d="M525 60H612"/><path d="M845 60H932"/><path d="M1165 60H1212"/></g>
+    <text x="730" y="20" text-anchor="middle" font-size="18" fill="#5c6660" font-family="Inter,system-ui">within 48h, auditor can freeze</text>
+  </svg>
+</section>
+
+<!-- 5 Backtest -->
+<section class="slide">
+  <div class="eyebrow">Backtest, ERA5 via Open-Meteo, 2001-2025</div>
+  <h2 style="margin-bottom:20px">The trigger fires in bad years, not every year.</h2>
+  <div class="grid2" style="grid-template-columns:1.35fr 1fr;align-items:start">
+    <svg viewBox="0 0 860 540" style="width:100%" aria-label="Grobogan Oct-Dec rainfall in trigger years">
+      <g font-family="Inter,system-ui" font-size="20" fill="#5c6660">
+        <text x="20" y="30" font-weight="700" fill="#17211b" font-size="24">Grobogan, Oct-Dec rainfall in trigger years (mm)</text>
+        <line x1="80" y1="460" x2="840" y2="460" stroke="#17211b" stroke-width="2"/>
+        <text x="70" y="466" text-anchor="end">0</text>
+        <text x="70" y="237" text-anchor="end">400</text><line x1="80" y1="231.4" x2="840" y2="231.4" stroke="#d9d4c7"/>
+        <text x="70" y="123" text-anchor="end">600</text><line x1="80" y1="117.1" x2="840" y2="117.1" stroke="#d9d4c7"/>
+        <line x1="80" y1="91.4" x2="840" y2="91.4" stroke="#5c6660" stroke-dasharray="8 8" stroke-width="2"/>
+        <text x="836" y="82" text-anchor="end">median 645</text>
+        <line x1="80" y1="140.6" x2="840" y2="140.6" stroke="#c9962e" stroke-width="4"/>
+        <text x="836" y="132" text-anchor="end" fill="#8a6516" font-weight="700">p20 threshold 559</text>
+      </g>
+      <g fill="#1f3d2b">
+        <rect x="110" y="196.6" width="70" height="263.4"/>
+        <rect x="230" y="162.3" width="70" height="297.7"/>
+        <rect x="350" y="239.4" width="70" height="220.6"/>
+        <rect x="470" y="206.9" width="70" height="253.1"/>
+        <rect x="590" y="152" width="70" height="308"/>
+        <rect x="710" y="230.3" width="70" height="229.7" fill="#b5452f"/>
+      </g>
+      <g font-family="Inter,system-ui" font-size="20" text-anchor="middle">
+        <text x="145" y="186" fill="#17211b">461</text><text x="265" y="152" fill="#17211b">521</text><text x="385" y="229" fill="#17211b">386</text>
+        <text x="505" y="196" fill="#17211b">443</text><text x="625" y="178" fill="#f3f0e8">539</text><text x="745" y="220" fill="#b5452f" font-weight="700">402</text>
+        <g fill="#5c6660"><text x="145" y="492">2002</text><text x="265" y="492">2004</text><text x="385" y="492">2006</text><text x="505" y="492">2009</text><text x="625" y="492">2019</text><text x="745" y="492">2023</text></g>
+      </g>
+    </svg>
+    <div>
+      <table>
+        <tr><th>District</th><th>p20 mm</th><th>Hits</th></tr>
+        <tr><td>Grobogan</td><td>559</td><td>6 / 25</td></tr>
+        <tr><td>Demak</td><td>581</td><td>6 / 25</td></tr>
+        <tr><td>Klaten</td><td>551</td><td>5 / 25</td></tr>
+        <tr><td>Kupang</td><td>196</td><td>4 / 25</td></tr>
+      </table>
+      <p class="muted" style="font-size:22px;margin-top:22px">All four districts trigger in 2019 and 2023. Thresholds use each district's 1991-2020 baseline. Open gap: the 2015 El Nino did not trigger in the three Java sites, and yield loss still has to be checked against BPS district production data.</p>
+    </div>
+  </div>
+  <div class="src">Data: research/data/backtest-calibrated.json (Open-Meteo Historical Weather API, ERA5 / ERA5-Land)</div>
+</section>
+
+<!-- 6 Why Solana -->
+<section class="slide dark">
+  <div class="eyebrow">Why Solana</div>
+  <h2>The chain does three jobs a spreadsheet cannot.</h2>
+  <div class="grid3">
+    <div class="card"><h3>Money can't back out</h3><p class="muted">Funds sit in a program vault before the season. A sponsor cannot quietly withdraw once a drought is on the news.</p></div>
+    <div class="card"><h3>List can't grow</h3><p class="muted">The roster root is written before freeze. Any farmer can check their own inclusion in the browser against the on-chain root.</p></div>
+    <div class="card"><h3>Result can be replayed</h3><p class="muted">Observed rainfall and a data hash sit on-chain. Anyone can rerun the public script during the dispute window.</p></div>
+  </div>
+  <p class="muted" style="margin-top:40px">Base fee per settle or roster transaction is 0.000005 SOL, so a campaign's on-chain cost is noise next to a Rp2,500 bank transfer fee. USDC on Solana is native and widely supported by payout partners.</p>
+</section>
+
+<!-- 7 Business model -->
+<section class="slide">
+  <div class="eyebrow">Business model</div>
+  <h2>Sponsors pay for accountable distribution, not for yield.</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Who pays</h3>
+      <ul class="muted" style="font-size:24px">
+        <li>CSR teams that need audit-ready reports</li>
+        <li>Zakat bodies (national ZIS collection 2025: Rp44.7T)</li>
+        <li>NGOs, local governments, rice mills and feed offtakers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>How we earn</h3>
+      <ul class="muted" style="font-size:24px">
+        <li>Platform fee of 3-5% of locked campaign funds (planned, not yet validated with a sponsor)</li>
+        <li>No interest, no token, no farmer fees</li>
+        <li>Unused funds roll to next season or return to the sponsor</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:32px">Worked example, assumption only: expected cost about Rp60,000 per farmer per year plus Rp2,500 per payout, versus an AUTP premium of Rp180,000 per hectare per season.</p>
+  <div class="src">Sources: <a href="https://baznas.go.id/assets/images/szn/LPZN-Tahun-2025.pdf">BAZNAS LPZN 2025</a> · <a href="https://help.xendit.co/hc/en-us/articles/360027727432-Do-I-get-charged-for-a-bank-transfer-fee-for-Disbursement">Xendit disbursement fee</a></div>
+</section>
+
+<!-- 8 Competition -->
+<section class="slide">
+  <div class="eyebrow">Competition and substitutes</div>
+  <h2 style="margin-bottom:24px">The real competitor is the tengkulak's speed.</h2>
+  <table>
+    <tr><th>Who</th><th>What they do</th><th>Where we differ</th></tr>
+    <tr><td>Jasindo AUTP</td><td>Subsidised indemnity cover, 305k ha in 2024</td><td>No claims process; payout set by public rainfall</td></tr>
+    <tr><td>Tengkulak / ijon</td><td>Fast cash against a discounted harvest</td><td>Money arrives in the planting window with no debt</td></tr>
+    <tr><td>GiveDirectly + Flood Hub</td><td>Anticipatory cash before floods</td><td>Same idea, but with an on-chain record for Indonesian sponsors</td></tr>
+    <tr><td>Lemonade Crypto Climate Coalition</td><td>On-chain parametric cover, about 7,000 Kenyan farmers</td><td>No farmer premium; sponsor-funded; Indonesia-first</td></tr>
+    <tr><td>Solana insurance protocols</td><td>DefiLlama lists one Solana insurance protocol, none in agriculture</td><td>We are not selling insurance; this is conditional aid</td></tr>
+  </table>
+  <div class="src">Sources: <a href="https://www.businesswire.com/news/home/20230328005342/en/Nearly-7000-Kenyan-Farmers-Protected-by-the-Lemonade-Crypto-Climate-Coalition">BusinessWire, Lemonade coalition</a> · <a href="https://www.givedirectly.org/flood-forecast-ai">GiveDirectly</a> · DefiLlama Insurance category, checked 14 Sep 2026</div>
+</section>
+
+<!-- 9 Roadmap -->
+<section class="slide">
+  <div class="eyebrow">Roadmap, honest status</div>
+  <h2>Where things stand today.</h2>
+  <table>
+    <tr><th>Item</th><th>Status</th></tr>
+    <tr><td>25-year backtest across 4 districts</td><td><span class="pill done">Done</span></td></tr>
+    <tr><td>Landing page at nusaharvest-siaga.vercel.app</td><td><span class="pill done">Live</span></td></tr>
+    <tr><td>Solana program: lock, roster root, settle, dispute, release</td><td><span class="pill wip">In progress</span></td></tr>
+    <tr><td>Devnet campaign with sealed roster and replayable settle</td><td><span class="pill next">Next</span></td></tr>
+    <tr><td>Validate trigger years against BPS rice production</td><td><span class="pill next">Next</span></td></tr>
+    <tr><td>First small real campaign, team-funded and disclosed, before Oct 2027 season</td><td><span class="pill next">Planned</span></td></tr>
+  </table>
+  <p class="muted" style="margin-top:28px">No sponsors, users or funds yet. We will not claim any until they exist.</p>
+</section>
+
+<!-- 10 Ask -->
+<section class="slide dark">
+  <div class="eyebrow">The ask</div>
+  <h1 style="font-size:80px;max-width:1250px">Help us run the first real season.</h1>
+  <div class="grid3" style="margin-top:56px">
+    <div class="card"><h3>Sponsors</h3><p class="muted">A CSR team, zakat body or NGO willing to fund one district pilot and sign a letter of intent.</p></div>
+    <div class="card"><h3>Reviewers</h3><p class="muted">Anchor and oracle-design review of the settle and dispute path before mainnet.</p></div>
+    <div class="card"><h3>Grant support</h3><p class="muted">To cover audit, legal memo on conditional aid, and payout partner setup.</p></div>
+  </div>
+  <p style="margin-top:auto;font-size:26px">nusaharvest-siaga.vercel.app &nbsp;·&nbsp; github.com/bryankwandou/nusaharvest-siaga</p>
+</section>
+
+</div>
+<div id="hint">Arrow keys to navigate</div>
+<script>
+const slides=[...document.querySelectorAll('.slide')];let i=0;
+slides.forEach((s,k)=>{const f=document.createElement('div');f.className='foot';f.innerHTML='<span>NusaHarvest Siaga Tanam</span><span>'+(k+1)+' / '+slides.length+'</span>';s.appendChild(f)});
+function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('on',k===i));location.hash=i+1}
+function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);document.getElementById('stage').style.transform='translate(-50%,-50%) scale('+s+')'}
+addEventListener('resize',fit);fit();
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(i+1)}if(['ArrowLeft','PageUp'].includes(e.key))show(i-1);if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1)});
+addEventListener('click',e=>{if(e.target.closest('a'))return;show(e.clientX>innerWidth/2?i+1:i-1)});
+show((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
