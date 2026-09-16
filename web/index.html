@@ -1,26 +1,495 @@
 <!doctype html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NusaHarvest Siaga Tanam</title>
-<meta name="description" content="Bantuan tunai sebelum gagal tanam, dipicu data curah hujan, bukti terbuka di Solana.">
+<meta name="description" content="Rainfall-triggered planting support for Indonesian farmers. No premium, no claim form, payouts designed to be checked on Solana.">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f3f0e8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121814" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="brand/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#f6f4ee;--fg:#1d2a1f;--muted:#5b6b5d;--accent:#2f7a3e}
-  @media (prefers-color-scheme:dark){:root{--bg:#121812;--fg:#e6eee3;--muted:#9fb09f;--accent:#6cc27d}}
-  body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,sans-serif}
-  main{max-width:680px;margin:0 auto;padding:12vh 24px}
-  small{color:var(--accent);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
-  h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.1;margin:.3em 0}
-  p{color:var(--muted)}
+:root{--bg:#f3f0e8;--ink:#17211b;--muted:#5c6660;--line:#d9d4c7;--card:#fbfaf6;--card2:#efebe0;--track:#e8e3d6;--green:#1f3d2b;--leaf:#2f6b45;--gold:#c9962e;--gold-text:#8a6415;--gold-soft:#f1e2bd;--red:#b5452f;--done-bg:#d6e7da;--on-green:#eef2ec;--on-green-muted:#c3d1c7;--shadow:#1f3d2b55}
+@media (prefers-color-scheme:dark){:root{--bg:#121814;--ink:#e9ece6;--muted:#a3ada6;--line:#2c3630;--card:#1a221d;--card2:#212a24;--track:#2c3630;--leaf:#7fbf92;--gold-text:#e8c36a;--gold-soft:#3a3120;--red:#e0775f;--done-bg:#23382a;--shadow:#00000088}
+ .explorer{background:#18291f!important;border:1px solid var(--line)}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.skip{position:absolute;left:12px;top:-60px;background:var(--green);color:#fff;padding:10px 14px;border-radius:8px;z-index:20}
+.skip:focus{top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:24px}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:650;letter-spacing:-.02em;margin:0}
+.num{font-variant-numeric:tabular-nums}
+nav{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+nav.scrolled{border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font:650 20px Fraunces,Georgia,serif;letter-spacing:-.02em;text-decoration:none}
+.brand img{width:32px;height:32px;display:block}
+.brand span b{font-weight:inherit;color:var(--gold-text)}
+.links{display:flex;gap:28px;font-size:14px;color:var(--muted)}
+.links a{text-decoration:none}.links a:hover{color:var(--ink)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;flex-shrink:0}
+.lang button{border:0;background:none;font:600 12px Inter,sans-serif;padding:6px 12px;min-height:32px;border-radius:999px;cursor:pointer;color:var(--muted)}
+.lang button[aria-pressed=true]{background:var(--green);color:#fff}
+.hero{padding-block:88px 72px;display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.hero>*{min-width:0}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--leaf)}
+.hero h1{font-size:clamp(38px,6vw,72px);line-height:1.04;margin:16px 0 22px}
+.hero h1 em{font-style:normal;color:var(--gold-text)}
+.lead{font-size:19px;color:var(--muted);max-width:40ch;margin:0}
+.cta{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:10px;font:600 15px Inter,sans-serif;text-decoration:none;transition:transform .2s,box-shadow .2s,background .2s;border:1px solid transparent;cursor:pointer;color:inherit;background:none}
+.btn.primary{background:var(--green);color:#fff}
+.btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 24px -10px var(--green)}
+.btn.ghost{border-color:var(--line)}.btn.ghost:hover{background:var(--card)}
+.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none}
+.gauge{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 30px 60px -40px var(--shadow)}
+.gauge-top{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.gauge-val{font-family:Fraunces,Georgia,serif;font-size:56px;line-height:1;margin:14px 0 4px}
+.gauge-val small{font-size:20px}
+.bar{position:relative;height:14px;background:var(--track);border-radius:99px;margin:34px 0 10px}
+.bar-fill{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--red),#d9774f);border-radius:99px;width:0;transition:width 1.6s cubic-bezier(.2,.8,.2,1)}
+.tick{position:absolute;top:-8px;bottom:-8px;width:2px;background:var(--ink)}
+.tick>span{position:absolute;top:-24px;right:-2px;font-size:11px;white-space:nowrap;color:var(--muted)}
+.status{display:flex;align-items:center;gap:10px;margin-top:22px;padding:14px;border-radius:12px;background:var(--gold-soft);font-size:14px;font-weight:500}
+.dot{width:9px;height:9px;flex-shrink:0;border-radius:50%;background:var(--gold);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #c9962e88}70%{box-shadow:0 0 0 10px #c9962e00}100%{box-shadow:0 0 0 0 #c9962e00}}
+section{padding-block:80px}
+.sec-head{max-width:640px;margin-bottom:40px}
+.sec-head h2{font-size:clamp(28px,4vw,44px);line-height:1.1;margin:12px 0 14px}
+.sec-head p{color:var(--muted);font-size:17px;margin:0}
+.problem{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.problem div{background:var(--card);padding:30px}
+.problem b{display:block;font-family:Fraunces,Georgia,serif;font-size:40px;font-weight:650;color:var(--leaf)}
+.problem p{margin:6px 0 0;color:var(--muted);font-size:15px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;transition:transform .3s,border-color .3s}
+.step:hover{transform:translateY(-4px);border-color:var(--leaf)}
+.step:before{counter-increment:s;content:"0" counter(s);font:600 12px Inter,sans-serif;color:var(--gold-text);letter-spacing:.1em}
+.step h3{font-size:21px;margin:12px 0 8px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+/* payout stepper */
+.stepper{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;grid-template-columns:260px 1fr;gap:32px}
+.stepper [role=tablist]{display:flex;flex-direction:column;gap:6px;margin:0;padding:0}
+.stepper [role=tab]{display:flex;gap:12px;align-items:center;text-align:left;border:1px solid transparent;background:none;color:var(--muted);font:500 15px Inter,sans-serif;padding:10px 12px;border-radius:10px;cursor:pointer;min-height:44px}
+.stepper [role=tab] i{font-style:normal;flex-shrink:0;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;border:1px solid var(--line)}
+.stepper [role=tab].past i{background:var(--done-bg);color:var(--leaf);border-color:transparent}
+.stepper [role=tab][aria-selected=true]{background:var(--card2);color:var(--ink);border-color:var(--line)}
+.stepper [role=tab][aria-selected=true] i{background:var(--green);color:#fff;border-color:transparent}
+.panel h3{font-size:26px;margin:4px 0 10px}
+.panel p{color:var(--muted);margin:0 0 18px}
+.panel .who{font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-text)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 18px}
+.facts div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.facts dt{font-size:12px;color:var(--muted)}
+.facts dd{margin:2px 0 0;font:600 18px Inter,sans-serif;font-variant-numeric:tabular-nums}
+.facts dd.low{color:var(--red)}
+.ex{font-size:13px;color:var(--muted)}
+.stepper-nav{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+.progress{height:4px;background:var(--track);border-radius:99px;margin-bottom:20px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--leaf);transition:width .4s}
+/* explorer */
+.explorer{background:var(--green);color:var(--on-green);border-radius:24px;padding:40px}
+.explorer .sec-head p{color:var(--on-green-muted)}
+.explorer .eyebrow{color:#e8c36a}
+.sites{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.sites button{border:1px solid #ffffff44;background:none;color:var(--on-green);padding:8px 16px;min-height:40px;border-radius:999px;font:500 14px Inter,sans-serif;cursor:pointer;transition:background .2s}
+.sites button[aria-pressed=true]{background:var(--on-green);color:#1f3d2b}
+.chart-box{overflow-x:auto;padding-bottom:4px}
+.chart{display:flex;align-items:flex-end;gap:5px;height:260px;position:relative;min-width:640px;padding-top:28px}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;position:relative}
+.col i{display:block;width:100%;border-radius:4px 4px 0 0;height:0;transition:height .9s cubic-bezier(.2,.8,.2,1)}
+.col.hit i{background:#e8c36a}
+.col.ok i{background:repeating-linear-gradient(135deg,#7fa98b55 0 4px,#7fa98b22 4px 8px);border:1px dashed #7fa98b;border-bottom:0}
+.col small{font-size:10px;color:var(--on-green-muted);margin-top:6px;height:15px}
+.col:hover i{filter:brightness(1.2)}
+.col .tip{position:absolute;bottom:calc(100% - 20px);background:#0e1d14;color:#eef2ec;padding:4px 8px;border-radius:6px;font-size:12px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:2}
+.col:first-child .tip{left:0}.col:last-child .tip{right:0}
+.col:hover .tip{opacity:1}
+.threshold{position:absolute;left:0;right:0;border-top:2px dashed #f1e2bd;pointer-events:none}
+.threshold span{position:absolute;right:0;top:-22px;font-size:12px;color:#f1e2bd}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--on-green-muted);margin-top:14px}
+.legend span:before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.legend .l-hit:before{background:#e8c36a}
+.legend .l-ok:before{border:1px dashed #7fa98b;background:#7fa98b33}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.stats div{border-top:1px solid #ffffff22;padding-top:14px}
+.stats b{font-family:Fraunces,Georgia,serif;font-size:32px;display:block;font-weight:650}
+.stats span{font-size:14px;color:var(--on-green-muted)}
+.note{font-size:13px;color:var(--on-green-muted);margin:22px 0 0}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+.compare{width:100%;border-collapse:collapse;background:var(--card);min-width:520px}
+.compare th,.compare td{text-align:left;padding:16px 20px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:top}
+.compare tr:last-child td{border-bottom:0}
+.compare thead th{font-weight:600;background:var(--card2)}
+.compare tbody th{font-weight:500}
+.compare td:last-child{color:var(--leaf);font-weight:500}
+/* wallet */
+.wallet{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.wallet-card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px}
+.wallet-card h3{font-size:22px;margin:0 0 8px}
+.wallet-card p{color:var(--muted);margin:0 0 16px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--gold-soft);color:var(--gold-text);margin-bottom:12px}
+.wallet-card ul{margin:0;padding-left:20px;color:var(--muted)}
+.wallet-card li{margin:6px 0}
+.detect{margin-top:14px;font-size:14px;padding:12px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
+.status-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.phase{padding:20px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.phase em{font-style:normal;font-size:12px;font-weight:600;padding:3px 8px;border-radius:99px;background:var(--track);color:var(--muted)}
+.phase.done em{background:var(--done-bg);color:var(--leaf)}
+.phase.now em{background:var(--gold-soft);color:var(--gold-text)}
+.phase h3{font-size:18px;margin:12px 0 6px}
+.phase p{margin:0;font-size:14px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:32px;font-size:14px;color:var(--muted)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+footer img{height:28px;width:auto;display:block}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.no-js .reveal{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*,*:before{animation:none!important;transition:none!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}}
+@media (max-width:860px){.hero{grid-template-columns:1fr;padding-block:40px 48px;gap:36px}.links{display:none}.problem,.stats{grid-template-columns:1fr}.steps,.status-grid{grid-template-columns:1fr 1fr}.explorer{padding:24px}.stepper{grid-template-columns:1fr;gap:20px;padding:20px}.stepper [role=tablist]{flex-direction:row;overflow-x:auto}.stepper [role=tab] span{display:none}.stepper [role=tab]{padding:8px}.wallet{grid-template-columns:1fr}section{padding-block:56px}}
+@media (max-width:520px){.wrap{padding-inline:16px}.steps,.status-grid{grid-template-columns:1fr}.compare th,.compare td{padding:12px}.gauge{padding:20px}.gauge-val{font-size:46px}.lead{font-size:17px}.explorer{padding:20px 16px;border-radius:18px}.brand{font-size:18px}.btn{flex:1 1 100%}}
 </style>
 </head>
 <body>
-<main>
-  <small>NusaHarvest · Siaga Tanam</small>
-  <h1>Bantuan tunai sebelum gagal tanam.</h1>
-  <p>Saat curah hujan awal musim jatuh di bawah ambang historis wilayah, dana sponsor dikirim langsung ke petani terdaftar. Tanpa premi, tanpa klaim, dan setiap keputusan bisa diverifikasi publik di Solana.</p>
-  <p>Sedang dibangun. Deploy uji coba.</p>
+<a class="skip" href="#main" data-i="skip">Skip to content</a>
+<nav id="nav" aria-label="Main"><div class="wrap nav">
+  <a class="brand" href="#top" aria-label="NusaHarvest home">
+    <img src="brand/logo-mark.svg" alt="" width="32" height="32">
+    <span>Nusa<b>Harvest</b></span>
+  </a>
+  <div class="links">
+    <a href="#how" data-i="nav_how">How it works</a>
+    <a href="#payout" data-i="nav_payout">Payout</a>
+    <a href="#data" data-i="nav_data">The data</a>
+    <a href="#roadmap" data-i="nav_status">Build status</a>
+  </div>
+  <div class="lang" role="group" aria-label="Language / Bahasa">
+    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" data-lang="id" aria-pressed="false">ID</button>
+  </div>
+</div></nav>
+
+<main id="main" tabindex="-1">
+<div class="wrap hero" id="top">
+  <div>
+    <div class="eyebrow reveal" data-i="eyebrow">Siaga Tanam · rainfall-triggered planting support</div>
+    <h1 class="reveal" data-i="h1">Cash arrives <em>before</em> the harvest fails.</h1>
+    <p class="lead reveal" data-i="lead">When early-season rain falls below a district's historical floor, sponsor money goes to registered farmers. No premium to pay, no claim to file, and every payout is meant to be checkable on Solana.</p>
+    <div class="cta reveal">
+      <a class="btn primary" href="#data" data-i="cta1">Explore 25 years of rain</a>
+      <a class="btn ghost" href="#payout" data-i="cta2">How a payout works</a>
+    </div>
+  </div>
+  <figure class="gauge reveal" style="margin:0">
+    <div class="gauge-top"><span data-i="g_site">Grobogan · Oct to Dec 2023</span><span data-i="g_label">Season rainfall</span></div>
+    <div class="gauge-val num"><span id="g-mm" aria-hidden="true">402</span><span class="sr">402</span> <small>mm</small></div>
+    <div class="bar" role="img" data-i-aria="g_bar" aria-label="402 mm against a floor of 559 mm"><div class="bar-fill" id="g-fill"></div><div class="tick" id="g-tick"><span><span data-i="floor">floor</span> 559 mm</span></div></div>
+    <figcaption class="status"><span class="dot" aria-hidden="true"></span><span data-i="g_status">Below the floor: this season would have paid out.</span></figcaption>
+  </figure>
+</div>
+
+<section class="wrap" aria-labelledby="p_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="p_eye">Why this exists</div>
+    <h2 id="p_h" data-i="p_h">Crop insurance does not reach most small farmers.</h2>
+    <p data-i="p_p">Classic insurance asks a farmer to pay up front, prove a loss, and wait months for an adjuster. By the time money comes, the planting window is gone.</p>
+  </div>
+  <div class="problem reveal">
+    <div><b>21 / 100</b><p data-i="p1">district seasons in our four test districts fell below the 20th-percentile rainfall floor between 2001 and 2025. Roughly one in five.</p></div>
+    <div><b>0</b><p data-i="p2">forms a farmer fills in to receive a payout. The rainfall record is the claim.</p></div>
+    <div><b>1</b><p data-i="p3">public settlement per district and season, designed so anyone can read who was paid, how much, and why.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="how" aria-labelledby="h_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="h_eye">How it works</div>
+    <h2 id="h_h" data-i="h_h">Four steps, no adjuster.</h2>
+  </div>
+  <div class="steps">
+    <div class="step reveal"><h3 data-i="s1h">Sponsor funds a campaign</h3><p data-i="s1p">A company, local government or donor locks USDC for one district and one season.</p></div>
+    <div class="step reveal"><h3 data-i="s2h">Farmers register once</h3><p data-i="s2p">Sign-up runs over WhatsApp. The roster is sealed as a Merkle root before the season starts.</p></div>
+    <div class="step reveal"><h3 data-i="s3h">Rain decides</h3><p data-i="s3p">Satellite-based rainfall is compared with the district's floor. No one inspects a field.</p></div>
+    <div class="step reveal"><h3 data-i="s4h">Money moves</h3><p data-i="s4p">If rain is short, each farmer receives the same amount. If not, the sponsor gets the funds back.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="payout" aria-labelledby="w_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="w_eye">Walkthrough</div>
+    <h2 id="w_h" data-i="w_h">How a payout works.</h2>
+    <p data-i="w_p">Follow one season in Grobogan, 2023. Rainfall figures are real backtest values. Money amounts are an example.</p>
+  </div>
+  <div class="stepper reveal">
+    <div role="tablist" aria-label="Payout steps" id="tabs"></div>
+    <div>
+      <div class="progress" aria-hidden="true"><span id="prog"></span></div>
+      <div id="panels"></div>
+      <div class="stepper-nav">
+        <button type="button" class="btn ghost" id="prev" data-i="prev">Back</button>
+        <button type="button" class="btn primary" id="next" data-i="next_btn">Next step</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="data" aria-labelledby="d_h">
+  <div class="explorer reveal">
+    <div class="sec-head">
+      <div class="eyebrow" data-i="d_eye">Backtest, real data</div>
+      <h2 id="d_h" data-i="d_h">Would it have paid out? Pick a district.</h2>
+      <p data-i="d_p">October to December rainfall, 2001 to 2025. Gold bars are seasons below the floor, drawn at their real totals. Our published summary records only that the other seasons stayed above the floor, so they are shown as outlines, not measured bars.</p>
+    </div>
+    <div class="sites" id="sites" role="group" aria-label="District"></div>
+    <div class="chart-box"><div class="chart" id="chart" aria-hidden="true"></div></div>
+    <div class="legend"><span class="l-hit" data-i="lg_hit">Below floor, would pay (real total)</span><span class="l-ok" data-i="lg_ok">Above floor, no payout</span></div>
+    <table class="sr" id="chart-table"><caption data-i="tbl_cap">Seasons below the payout floor</caption><thead><tr><th data-i="tbl_year">Year</th><th data-i="tbl_mm">Rainfall (mm)</th></tr></thead><tbody></tbody></table>
+    <div class="stats">
+      <div><b id="st-floor" class="num">–</b><span data-i="st1">Payout floor (20th percentile, 1991 to 2020)</span></div>
+      <div><b id="st-med" class="num">–</b><span data-i="st2">Typical season (median)</span></div>
+      <div><b id="st-hits" class="num" aria-live="polite">–</b><span data-i="st3">Seasons that would have paid</span></div>
+    </div>
+    <p class="note" data-i="d_note">Source: Open-Meteo historical archive (ERA5 / ERA5-Land). Figures are modelled rainfall, not rain-gauge readings.</p>
+  </div>
+</section>
+
+<section class="wrap" aria-labelledby="c_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="c_eye">Compared</div>
+    <h2 id="c_h" data-i="c_h">What changes for the farmer.</h2>
+  </div>
+  <div class="table-wrap reveal">
+  <table class="compare">
+    <thead><tr><th scope="col"><span class="sr" data-i="c_topic">Topic</span></th><th scope="col" data-i="c_old">Crop insurance today</th><th scope="col">NusaHarvest</th></tr></thead>
+    <tbody>
+      <tr><th scope="row" data-i="r1">Farmer pays</th><td data-i="r1a">Premium every season</td><td data-i="r1b">Nothing</td></tr>
+      <tr><th scope="row" data-i="r2">Proof of loss</th><td data-i="r2a">Field inspection</td><td data-i="r2b">Rainfall record</td></tr>
+      <tr><th scope="row" data-i="r3">Time to cash</th><td data-i="r3a">Months</td><td data-i="r3b">Days after the season window closes</td></tr>
+      <tr><th scope="row" data-i="r4">Who can audit</th><td data-i="r4a">The insurer</td><td data-i="r4b">Anyone with a Solana explorer</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="wrap" id="wallet" aria-labelledby="wl_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="wl_eye">Wallet</div>
+    <h2 id="wl_h" data-i="wl_h">No wallet to connect yet.</h2>
+    <p data-i="wl_p">The Solana program is still being built on devnet. Until it is deployed and tested, this page will not ask you to connect or sign anything, and it will not show balances.</p>
+  </div>
+  <div class="wallet">
+    <div class="wallet-card reveal">
+      <span class="pill" data-i="wl_pill">Devnet program in progress</span>
+      <h3 data-i="wl_h3">What the wallet will be for</h3>
+      <ul>
+        <li data-i="wl_li1">Sponsors fund a campaign vault and can see it on devnet first.</li>
+        <li data-i="wl_li2">Anyone can open a settled season and check each payout.</li>
+        <li data-i="wl_li3">Farmers do not need a wallet. Payouts reach them through a partner cash-out route.</li>
+      </ul>
+    </div>
+    <div class="wallet-card reveal">
+      <h3 data-i="wl_h3b">Connect wallet</h3>
+      <p data-i="wl_p2">Disabled until the devnet program is live.</p>
+      <button type="button" class="btn primary" disabled aria-describedby="detect" data-i="wl_btn">Connect wallet</button>
+      <div class="detect" id="detect" data-i="wl_none">Checking for a Solana wallet in this browser.</div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="roadmap" aria-labelledby="b_h">
+  <div class="sec-head reveal">
+    <div class="eyebrow" data-i="b_eye">Build status</div>
+    <h2 id="b_h" data-i="b_h">What works today, and what does not yet.</h2>
+    <p data-i="b_p">We would rather show an honest checklist than a demo that pretends.</p>
+  </div>
+  <div class="status-grid">
+    <div class="phase done reveal"><em data-i="done">Done</em><h3 data-i="ph1">Research and backtest</h3><p data-i="ph1p">25 years of rainfall across four districts, thresholds calibrated.</p></div>
+    <div class="phase now reveal"><em data-i="now">In progress</em><h3 data-i="ph2">Solana program</h3><p data-i="ph2p">Campaign, settle and release instructions on devnet.</p></div>
+    <div class="phase reveal"><em data-i="next">Next</em><h3 data-i="ph3">Security review</h3><p data-i="ph3p">Tests, review and published findings.</p></div>
+    <div class="phase reveal"><em data-i="next">Next</em><h3 data-i="ph4">Pilot and walkthrough</h3><p data-i="ph4p">Recorded demo and a first sponsor campaign.</p></div>
+  </div>
+</section>
 </main>
+
+<footer><div class="wrap">
+  <img src="brand/logo.svg" alt="NusaHarvest" width="131" height="28">
+  <span data-i="foot">Built on Solana. Rainfall data from Open-Meteo.</span>
+  <span>© 2026 NusaHarvest</span>
+</div></footer>
+
+<script>
+// Source: research/data/backtest-calibrated.json (p20_mm, median_mm, drought_hits_2001_2025)
+const DATA={
+ Klaten:{floor:551,med:796,hits:{2006:502,2009:506,2018:507,2019:343,2023:316}},
+ Grobogan:{floor:559,med:645,hits:{2002:461,2004:521,2006:386,2009:443,2019:539,2023:402}},
+ Demak:{floor:581,med:716,hits:{2002:446,2004:574,2006:377,2009:463,2019:534,2023:497}},
+ Kupang:{floor:196,med:312,hits:{2004:189,2015:143,2019:171,2023:176}}
+};
+const T={id:{
+ skip:"Lewati ke konten",
+ nav_how:"Cara kerja",nav_payout:"Pencairan",nav_data:"Data",nav_status:"Status",
+ eyebrow:"Siaga Tanam · bantuan tanam berbasis curah hujan",
+ h1:"Uang datang <em>sebelum</em> panen gagal.",
+ lead:"Kalau hujan awal musim di sebuah kabupaten turun di bawah batas historisnya, dana sponsor dikirim ke petani yang terdaftar. Petani tidak bayar premi, tidak mengurus klaim, dan setiap pencairan dirancang agar bisa dicek siapa pun di Solana.",
+ cta1:"Lihat data hujan 25 tahun",cta2:"Cara dana cair",
+ g_site:"Grobogan · Okt sampai Des 2023",g_label:"Curah hujan musim",g_status:"Di bawah batas: musim ini akan mencairkan dana.",
+ g_bar:"402 mm dibanding batas 559 mm",
+ p_eye:"Latar belakang",p_h:"Asuransi tani belum menjangkau sebagian besar petani kecil.",
+ p_p:"Asuransi biasa meminta petani bayar di muka, membuktikan kerugian, lalu menunggu penilai berbulan-bulan. Saat uang cair, masa tanam sudah lewat.",
+ p1:"musim di empat kabupaten uji berada di bawah batas persentil ke-20 sepanjang 2001 sampai 2025. Kira-kira satu dari lima.",
+ p2:"formulir yang perlu diisi petani. Catatan curah hujan sudah menjadi klaimnya.",
+ p3:"penyelesaian terbuka per kabupaten per musim, dirancang agar siapa pun bisa membaca siapa yang dibayar, berapa, dan alasannya.",
+ h_eye:"Cara kerja",h_h:"Empat langkah, tanpa penilai.",
+ s1h:"Sponsor mendanai kampanye",s1p:"Perusahaan, pemda, atau donatur mengunci USDC untuk satu kabupaten dan satu musim.",
+ s2h:"Petani daftar sekali",s2p:"Pendaftaran lewat WhatsApp. Daftar peserta dikunci sebagai Merkle root sebelum musim mulai.",
+ s3h:"Hujan yang menentukan",s3p:"Curah hujan berbasis satelit dibandingkan dengan batas kabupaten itu. Tidak ada yang perlu memeriksa lahan.",
+ s4h:"Dana bergerak",s4p:"Kalau hujan kurang, setiap petani menerima jumlah yang sama. Kalau cukup, dana kembali ke sponsor.",
+ w_eye:"Contoh alur",w_h:"Bagaimana dana cair.",
+ w_p:"Ikuti satu musim di Grobogan, 2023. Angka curah hujan adalah hasil uji mundur yang asli. Jumlah uang hanya contoh.",
+ prev:"Kembali",next_btn:"Langkah berikutnya",restart:"Ulangi dari awal",
+ d_eye:"Uji mundur, data asli",d_h:"Apakah dana akan cair? Pilih kabupaten.",
+ d_p:"Curah hujan Oktober sampai Desember, 2001 sampai 2025. Batang emas adalah musim di bawah batas, digambar sesuai total aslinya. Ringkasan kami hanya mencatat bahwa musim lain berada di atas batas, jadi musim itu ditampilkan sebagai garis, bukan batang terukur.",
+ lg_hit:"Di bawah batas, dana cair (total asli)",lg_ok:"Di atas batas, tidak cair",
+ tbl_cap:"Musim di bawah batas pencairan",tbl_year:"Tahun",tbl_mm:"Curah hujan (mm)",
+ st1:"Batas pencairan (persentil ke-20, 1991 sampai 2020)",st2:"Musim normal (median)",st3:"Musim yang akan cair",
+ d_note:"Sumber: arsip historis Open-Meteo (ERA5 / ERA5-Land). Angka berupa hujan hasil model, bukan alat ukur lapangan.",
+ c_eye:"Perbandingan",c_h:"Apa yang berubah bagi petani.",c_old:"Asuransi tani saat ini",c_topic:"Hal",
+ r1:"Petani membayar",r1a:"Premi tiap musim",r1b:"Tidak ada",
+ r2:"Bukti kerugian",r2a:"Pemeriksaan lahan",r2b:"Catatan curah hujan",
+ r3:"Waktu sampai cair",r3a:"Berbulan-bulan",r3b:"Beberapa hari setelah jendela musim ditutup",
+ r4:"Siapa yang bisa mengaudit",r4a:"Perusahaan asuransi",r4b:"Siapa saja lewat explorer Solana",
+ wl_eye:"Dompet",wl_h:"Belum ada dompet untuk dihubungkan.",
+ wl_p:"Program Solana masih dibangun di devnet. Sampai program itu dirilis dan diuji, halaman ini tidak akan meminta Anda menghubungkan atau menandatangani apa pun, dan tidak menampilkan saldo.",
+ wl_pill:"Program devnet sedang dikerjakan",wl_h3:"Untuk apa dompet nanti",
+ wl_li1:"Sponsor mendanai vault kampanye dan bisa melihatnya lebih dulu di devnet.",
+ wl_li2:"Siapa pun bisa membuka musim yang sudah diselesaikan dan mengecek setiap pencairan.",
+ wl_li3:"Petani tidak perlu dompet. Dana sampai lewat jalur pencairan tunai mitra.",
+ wl_h3b:"Hubungkan dompet",wl_p2:"Dinonaktifkan sampai program devnet berjalan.",wl_btn:"Hubungkan dompet",
+ wl_none:"Tidak ada dompet Solana terdeteksi di browser ini. Belum perlu memasang apa pun.",
+ wl_found:"Dompet Solana terdeteksi. Belum ada yang perlu ditandatangani, dan halaman ini tidak akan memintanya.",
+ b_eye:"Status pembangunan",b_h:"Apa yang sudah jalan, dan apa yang belum.",b_p:"Kami lebih memilih daftar jujur daripada demo yang berpura-pura.",
+ done:"Selesai",now:"Dikerjakan",next:"Berikutnya",
+ ph1:"Riset dan uji mundur",ph1p:"Data hujan 25 tahun di empat kabupaten, batas sudah dikalibrasi.",
+ ph2:"Program Solana",ph2p:"Instruksi kampanye, penyelesaian, dan pencairan di devnet.",
+ ph3:"Tinjauan keamanan",ph3p:"Pengujian, review, dan temuan yang dipublikasikan.",
+ ph4:"Pilot dan walkthrough",ph4p:"Video demo dan kampanye sponsor pertama.",
+ foot:"Dibangun di Solana. Data hujan dari Open-Meteo.",
+ hit:"cair",floor:"batas",above:"di atas batas",district:"Kabupaten"
+}};
+const EXTRA_EN={hit:"pays out",floor:"floor",above:"above floor",restart:"Start again",
+ wl_found:"A Solana wallet is installed in this browser. There is nothing to sign yet, and this page will not ask.",
+ wl_none:"No Solana wallet found in this browser. You do not need one yet."};
+
+// Payout stepper content (rain figures: Grobogan 2023 from backtest; money: illustrative)
+const STEPS={
+ en:[
+  {t:"Campaign funded",who:"Sponsor",p:"A sponsor locks funds for Grobogan for the October to December window. The payout floor, 559 mm, is fixed before the season and cannot be changed.",f:[["Pool (example)","10,000 USDC"],["Floor","559 mm"],["Window","1 Oct to 31 Dec"]]},
+  {t:"Roster sealed",who:"Farmer groups",p:"Farmers sign up through their group over WhatsApp. When sign-up closes, the list is sealed as a single Merkle root. Names and numbers stay off-chain.",f:[["Farmers (example)","400"],["Stored on-chain","1 root hash"]]},
+  {t:"Season runs",who:"Nobody acts",p:"Rain is summed day by day from satellite-based records. No one visits a field and no one files anything.",f:[["Rain so far (end Nov)","not tracked in backtest"],["Final total","402 mm"]]},
+  {t:"Settlement",who:"Program",p:"After 31 December the season total is compared with the floor. 402 mm is below 559 mm, so the campaign settles as a payout.",f:[["Season total","402 mm",1],["Floor","559 mm"],["Result","Payout"]]},
+  {t:"Money released",who:"Farmers",p:"The pool is split equally. Each farmer proves they are on the sealed roster and receives the same share. Had rain been above the floor, the sponsor would have been refunded instead.",f:[["Each farmer (example)","25 USDC"],["Share","Equal"],["If rain was enough","Refund to sponsor"]]}
+ ],
+ id:[
+  {t:"Kampanye didanai",who:"Sponsor",p:"Sponsor mengunci dana untuk Grobogan pada jendela Oktober sampai Desember. Batas pencairan, 559 mm, ditetapkan sebelum musim dan tidak bisa diubah.",f:[["Dana (contoh)","10.000 USDC"],["Batas","559 mm"],["Jendela","1 Okt sampai 31 Des"]]},
+  {t:"Daftar dikunci",who:"Kelompok tani",p:"Petani mendaftar lewat kelompoknya di WhatsApp. Saat pendaftaran ditutup, daftar dikunci menjadi satu Merkle root. Nama dan nomor tidak disimpan on-chain.",f:[["Petani (contoh)","400"],["Disimpan on-chain","1 root hash"]]},
+  {t:"Musim berjalan",who:"Tidak ada yang bertindak",p:"Hujan dijumlahkan setiap hari dari catatan berbasis satelit. Tidak ada kunjungan lahan dan tidak ada yang perlu mengajukan apa pun.",f:[["Hujan sampai akhir Nov","tidak dicatat di uji mundur"],["Total akhir","402 mm"]]},
+  {t:"Penyelesaian",who:"Program",p:"Setelah 31 Desember, total musim dibandingkan dengan batas. 402 mm berada di bawah 559 mm, jadi kampanye diselesaikan sebagai pencairan.",f:[["Total musim","402 mm",1],["Batas","559 mm"],["Hasil","Cair"]]},
+  {t:"Dana dikirim",who:"Petani",p:"Dana dibagi rata. Setiap petani membuktikan namanya ada di daftar yang dikunci dan menerima bagian yang sama. Kalau hujan di atas batas, dana dikembalikan ke sponsor.",f:[["Tiap petani (contoh)","25 USDC"],["Pembagian","Rata"],["Kalau hujan cukup","Kembali ke sponsor"]]}
+ ]};
+
+const EN={};document.querySelectorAll("[data-i]").forEach(e=>{if(!(e.dataset.i in EN))EN[e.dataset.i]=e.innerHTML});
+document.querySelectorAll("[data-i-aria]").forEach(e=>EN[e.dataset.iAria]=e.getAttribute("aria-label"));
+Object.assign(EN,EXTRA_EN);EN.district="District";
+let lang="en",current="Grobogan",stepIdx=0,wallet=false,booted=false;
+const t=k=>(lang==="id"&&T.id[k])||EN[k]||k;
+
+function setLang(l){
+ lang=l==="id"?"id":"en";document.documentElement.lang=lang;
+ document.querySelectorAll("[data-i]").forEach(e=>e.innerHTML=t(e.dataset.i));
+ document.querySelectorAll("[data-i-aria]").forEach(e=>e.setAttribute("aria-label",t(e.dataset.iAria)));
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ document.getElementById("sites").setAttribute("aria-label",t("district"));
+ try{localStorage.setItem("nh-lang",lang)}catch(e){}
+ render(current,booted);booted=true;buildStepper();showWallet();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.addEventListener("click",()=>setLang(b.dataset.lang)));
+
+// Chart: only real values. Below-floor seasons use their recorded totals; others are outlined from the floor to the median to mean "above floor".
+const sitesEl=document.getElementById("sites"),chart=document.getElementById("chart");
+Object.keys(DATA).forEach(n=>{const b=document.createElement("button");b.type="button";b.textContent=n;b.addEventListener("click",()=>render(n));sitesEl.appendChild(b)});
+function render(site,instant){
+ current=site;const d=DATA[site],max=d.med*1.15,pct=v=>v/max*100;
+ sitesEl.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.textContent===site));
+ chart.innerHTML="";
+ for(let y=2001;y<=2025;y++){
+  const mm=d.hits[y],hit=mm!=null,c=document.createElement("div");c.className="col "+(hit?"hit":"ok");
+  c.innerHTML=`<span class="tip">${y}: ${hit?mm+" mm · "+t("hit"):"&gt; "+d.floor+" mm · "+t("above")}</span><i></i><small>${String(y).slice(2)}</small>`;
+  chart.appendChild(c);
+  const bar=c.querySelector("i"),h=`calc((100% - 21px) * ${(hit?pct(mm):pct(d.med))/100})`;
+  if(instant)bar.style.height=h;else requestAnimationFrame(()=>requestAnimationFrame(()=>bar.style.height=h));
+ }
+ const th=document.createElement("div");th.className="threshold";th.style.bottom=`calc(21px + (100% - 49px) * ${pct(d.floor)/100})`;
+ th.innerHTML=`<span>${t("floor")} ${d.floor} mm</span>`;chart.appendChild(th);
+ document.getElementById("st-floor").textContent=d.floor+" mm";
+ document.getElementById("st-med").textContent=d.med+" mm";
+ document.getElementById("st-hits").textContent=Object.keys(d.hits).length+" / 25";
+ document.querySelector("#chart-table tbody").innerHTML=Object.entries(d.hits).map(([y,v])=>`<tr><td>${y}</td><td>${v}</td></tr>`).join("");
+}
+
+// Stepper (ARIA tabs pattern)
+const tabsEl=document.getElementById("tabs"),panelsEl=document.getElementById("panels");
+function buildStepper(){
+ const S=STEPS[lang];
+ tabsEl.innerHTML=S.map((s,i)=>`<button type="button" role="tab" id="tab${i}" aria-controls="panel${i}"><i>${i+1}</i><span>${s.t}</span></button>`).join("");
+ panelsEl.innerHTML=S.map((s,i)=>`<div class="panel" role="tabpanel" id="panel${i}" aria-labelledby="tab${i}" hidden><div class="who">${s.who}</div><h3>${s.t}</h3><p>${s.p}</p><dl class="facts">${s.f.map(f=>`<div><dt>${f[0]}</dt><dd${f[2]?' class="low"':""}>${f[1]}</dd></div>`).join("")}</dl></div>`).join("");
+ tabsEl.querySelectorAll("[role=tab]").forEach((b,i)=>{b.setAttribute("aria-label",S[i].t);b.addEventListener("click",()=>go(i))});
+ go(stepIdx,false);
+}
+function go(i,focus){
+ const n=STEPS.en.length;stepIdx=(i+n)%n;
+ tabsEl.querySelectorAll("[role=tab]").forEach((b,j)=>{const on=j===stepIdx;b.setAttribute("aria-selected",on);b.tabIndex=on?0:-1;b.classList.toggle("past",j<stepIdx);if(on&&focus)b.focus()});
+ panelsEl.querySelectorAll("[role=tabpanel]").forEach((p,j)=>p.hidden=j!==stepIdx);
+ document.getElementById("prog").style.width=((stepIdx+1)/n*100)+"%";
+ document.getElementById("prev").disabled=stepIdx===0;
+ const nx=document.getElementById("next");nx.textContent=stepIdx===n-1?t("restart"):t("next_btn");
+}
+tabsEl.addEventListener("keydown",e=>{
+ const k={ArrowRight:1,ArrowDown:1,ArrowLeft:-1,ArrowUp:-1}[e.key];
+ if(k){e.preventDefault();go(stepIdx+k,true)}else if(e.key==="Home"){e.preventDefault();go(0,true)}else if(e.key==="End"){e.preventDefault();go(STEPS.en.length-1,true)}
+});
+document.getElementById("prev").addEventListener("click",()=>go(stepIdx-1));
+document.getElementById("next").addEventListener("click",()=>go(stepIdx===STEPS.en.length-1?0:stepIdx+1));
+
+// Wallet: detection only. Never calls connect().
+function showWallet(){
+ wallet=!!(window.solana||window.phantom?.solana||window.solflare||window.backpack);
+ const el=document.getElementById("detect");el.dataset.i=wallet?"wl_found":"wl_none";el.innerHTML=t(el.dataset.i);
+}
+
+// Hero gauge, real Grobogan 2023 value
+function gauge(){
+ const mm=402,floor=559,scale=800,el=document.getElementById("g-mm");
+ document.getElementById("g-tick").style.left=(floor/scale*100)+"%";
+ document.getElementById("g-fill").style.width=(mm/scale*100)+"%";
+ if(matchMedia("(prefers-reduced-motion: reduce)").matches){el.textContent=mm;return}
+ const t0=performance.now();(function step(n){const p=Math.min(1,Math.max(0,(n-t0)/1600));el.textContent=Math.round(mm*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(step)})(t0);
+}
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.1});
+document.querySelectorAll(".reveal").forEach((e,i)=>{e.style.transitionDelay=(i%4)*80+"ms";io.observe(e)});
+addEventListener("scroll",()=>document.getElementById("nav").classList.toggle("scrolled",scrollY>8),{passive:true});
+
+let saved="en";try{saved=localStorage.getItem("nh-lang")||"en"}catch(e){}
+setLang(saved);setTimeout(gauge,300);
+addEventListener("load",showWallet);
+</script>
 </body>
 </html>
