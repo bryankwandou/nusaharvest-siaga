@@ -124,7 +124,7 @@ pub fn transfer_checked(
     if !is_token_program(token_program.address()) {
         return Err(KitError::InvalidProgramId.into());
     }
-    TransferChecked::<&AccountView, Legacy>::new(from, mint, to, authority, amount, decimals)
+    TransferChecked::<&AccountView>::new(from, mint, to, authority, amount, decimals)
         .invoke_signed_with_unverified_program(signers, token_program.address())
 }
 
@@ -142,7 +142,7 @@ pub fn mint_to_checked(
     if !is_token_program(token_program.address()) {
         return Err(KitError::InvalidProgramId.into());
     }
-    MintToChecked::<&AccountView, Legacy>::new(mint, account, mint_authority, amount, decimals)
+    MintToChecked::<&AccountView>::new(mint, account, mint_authority, amount, decimals)
         .invoke_signed_with_unverified_program(signers, token_program.address())
 }
 
@@ -160,7 +160,7 @@ pub fn burn_checked(
     if !is_token_program(token_program.address()) {
         return Err(KitError::InvalidProgramId.into());
     }
-    BurnChecked::<&AccountView, Legacy>::new(account, mint, authority, amount, decimals)
+    BurnChecked::<&AccountView>::new(account, mint, authority, amount, decimals)
         .invoke_signed_with_unverified_program(signers, token_program.address())
 }
 
@@ -176,6 +176,6 @@ pub fn close_token_account(
     if !is_token_program(token_program.address()) {
         return Err(KitError::InvalidProgramId.into());
     }
-    CloseAccount::<&AccountView, Legacy>::new(account, destination, authority)
+    CloseAccount::<&AccountView>::new(account, destination, authority)
         .invoke_signed_with_unverified_program(signers, token_program.address())
 }

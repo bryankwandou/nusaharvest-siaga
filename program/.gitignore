@@ -1,0 +1,5 @@
+target/
+tests-svm/target/
+.devnet-deployer.json
+*-keypair.json
+.e2e-keys/

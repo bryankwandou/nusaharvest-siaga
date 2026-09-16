@@ -370,12 +370,12 @@ mod tests {
 
         buf[0] = 0;
         assert_eq!(
-            pod::deserialize::<Demo>(&buf).unwrap_err(),
+            pod::deserialize::<Demo>(&buf).err().unwrap(),
             KitError::AccountDiscriminatorNotFound.into()
         );
         buf[0] = 8;
         assert_eq!(
-            pod::deserialize::<Demo>(&buf).unwrap_err(),
+            pod::deserialize::<Demo>(&buf).err().unwrap(),
             KitError::AccountDiscriminatorMismatch.into()
         );
     }
