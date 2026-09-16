@@ -52,11 +52,11 @@ ul{margin:0;padding-left:30px}
   <h1 style="max-width:1200px">When the rain is late, planting money is late too.</h1>
   <p class="muted" style="max-width:1100px;margin-top:36px">A smallholder rice farmer in Central Java plants when the October rains arrive. When they don't, seed and labour are already spent, and the fastest cash is a tengkulak advance paid back with a cheap harvest.</p>
   <div class="grid3" style="margin-top:auto">
-    <div class="card"><span class="big">305k ha</span><p class="muted">covered by the subsidised AUTP crop scheme in 2024, against a 1 million ha target</p></div>
-    <div class="card"><span class="big">Rp1.8T</span><p class="muted">estimated yearly potential for agricultural cover that stays unreached</p></div>
-    <div class="card"><span class="big">Weeks</span><p class="muted">is what an indemnity claim takes. A late-rain shock needs money inside the planting window.</p></div>
+    <div class="card"><span class="big">305k ha</span><p class="muted">enrolled in the government's subsidised AUTP crop scheme in 2024, against a 1 million ha target</p></div>
+    <div class="card"><span class="big">Rp1.8T</span><p class="muted">estimated yearly farm-protection market that AUTP and private schemes do not yet reach</p></div>
+    <div class="card"><span class="big">Weeks</span><p class="muted">for a field loss assessment. A late-rain shock needs money inside the planting window.</p></div>
   </div>
-  <div class="src">Source: <a href="https://www.jawapos.com/bisnis/015807495/asuransi-pertanian-potensial-raup-rp-18-triliun-tapi-masih-terkendala-edukasi-petani">Jawa Pos, agricultural cover potential Rp1.8T and AUTP 2024 coverage</a></div>
+  <div class="src">Source: <a href="https://www.jawapos.com/bisnis/015807495/asuransi-pertanian-potensial-raup-rp-18-triliun-tapi-masih-terkendala-edukasi-petani">Jawa Pos, farm-protection potential Rp1.8T and AUTP 2024 enrolment</a></div>
 </section>
 
 <!-- 2 Coops -->
@@ -75,13 +75,13 @@ ul{margin:0;padding-left:30px}
 <!-- 3 Solution -->
 <section class="slide">
   <div class="eyebrow">The idea</div>
-  <h2>Sponsors commit planting support before the season. Rainfall decides, not a claims desk.</h2>
+  <h2>A conditional grant: sponsors lock their own funds, and a public rainfall rule decides.</h2>
   <div class="grid3">
-    <div class="card"><h3>Locked before</h3><p class="muted">A sponsor (CSR, zakat body, NGO, local government) locks USDC in a Solana vault before October.</p></div>
+    <div class="card"><h3>Locked before</h3><p class="muted">A sponsor (CSR team, zakat institution, local government) locks its own funds in a Solana escrow before October.</p></div>
     <div class="card"><h3>Sealed roster</h3><p class="muted">The farmer list is sealed as a merkle root before the season. Nobody can be added after a drought is visible.</p></div>
-    <div class="card"><h3>Public trigger</h3><p class="muted">Oct-Dec satellite rainfall below the district's own 20th percentile releases funds after a 48-hour dispute window.</p></div>
+    <div class="card"><h3>Public trigger</h3><p class="muted">If Oct-Dec satellite rainfall falls below the district floor (its own 20th percentile), the grant is paid after a 48-hour dispute window.</p></div>
   </div>
-  <p class="muted" style="margin-top:40px">Farmers pay nothing and file nothing. Registration is by phone number; no crypto wallet on their side.</p>
+  <p class="muted" style="margin-top:40px">Farmers pay nothing, ever, and never touch crypto. A licensed payment provider sends rupiah to their e-wallet. NusaHarvest never holds funds; Solana is the public ledger and the sponsor's escrow.</p>
 </section>
 
 <!-- 4 How it works -->
@@ -92,7 +92,7 @@ ul{margin:0;padding-left:30px}
     <div class="card step"><div class="n">01 LOCK</div><h3>Fund the vault</h3><p class="muted">Sponsor deposits USDC into a campaign account with district, window and threshold fixed.</p></div>
     <div class="card step"><div class="n">02 SEAL</div><h3>Freeze the roster</h3><p class="muted">Registrations are hashed into a merkle root and written on-chain at freeze time.</p></div>
     <div class="card step"><div class="n">03 SETTLE</div><h3>Post the rainfall</h3><p class="muted">After Dec 31 the operator posts observed ERA5 millimetres plus a hash of the source data.</p></div>
-    <div class="card step"><div class="n">04 RELEASE</div><h3>Pay out</h3><p class="muted">An auditor has 48 hours to dispute. After that, anyone can call release.</p></div>
+    <div class="card step"><div class="n">04 RELEASE</div><h3>Disburse</h3><p class="muted">An auditor has 48 hours to dispute. After that, release sends funds to the payment partner, who pays rupiah to e-wallets.</p></div>
   </div>
   <svg viewBox="0 0 1400 120" style="width:100%;margin-top:40px" aria-label="state flow">
     <g font-family="Inter,system-ui" font-size="22" font-weight="600" text-anchor="middle">
@@ -161,32 +161,32 @@ ul{margin:0;padding-left:30px}
     <div class="card"><h3>List can't grow</h3><p class="muted">The roster root is written before freeze. Any farmer can check their own inclusion in the browser against the on-chain root.</p></div>
     <div class="card"><h3>Result can be replayed</h3><p class="muted">Observed rainfall and a data hash sit on-chain. Anyone can rerun the public script during the dispute window.</p></div>
   </div>
-  <p class="muted" style="margin-top:40px">Base fee per settle or roster transaction is 0.000005 SOL, so a campaign's on-chain cost is noise next to a Rp2,500 bank transfer fee. USDC on Solana is native and widely supported by payout partners.</p>
+  <p class="muted" style="margin-top:40px">Base fee per settle or roster transaction is 0.000005 SOL, so a campaign's on-chain cost is noise next to a Rp2,500 bank transfer fee. USDC on Solana is native and widely supported by licensed payment partners.</p>
 </section>
 
 <!-- 7 Business model -->
 <section class="slide">
   <div class="eyebrow">Business model</div>
-  <h2>Sponsors pay for accountable distribution, not for yield.</h2>
+  <h2>Sponsors pay for an accountable grant, not for yield.</h2>
   <div class="grid2">
     <div class="card">
       <h3>Who pays</h3>
       <ul class="muted" style="font-size:24px">
         <li>CSR teams that need audit-ready reports</li>
-        <li>Zakat bodies (national ZIS collection 2025: Rp44.7T)</li>
-        <li>NGOs, local governments, rice mills and feed offtakers</li>
+        <li>Zakat institutions (national ZIS collection 2025: Rp44.7T)</li>
+        <li>Local governments, NGOs, rice mills and feed offtakers</li>
       </ul>
     </div>
     <div class="card">
       <h3>How we earn</h3>
       <ul class="muted" style="font-size:24px">
         <li>Platform fee of 3-5% of locked campaign funds (planned, not yet validated with a sponsor)</li>
-        <li>No interest, no token, no farmer fees</li>
+        <li>No interest, no token, farmers pay nothing</li>
         <li>Unused funds roll to next season or return to the sponsor</li>
       </ul>
     </div>
   </div>
-  <p class="muted" style="margin-top:32px">Worked example, assumption only: expected cost about Rp60,000 per farmer per year plus Rp2,500 per payout, versus an AUTP premium of Rp180,000 per hectare per season.</p>
+  <p class="muted" style="margin-top:32px">Worked example, assumption only: expected sponsor cost about Rp60,000 per farmer per year plus a Rp2,500 disbursement fee. It sits alongside AUTP as a top-up, not in place of it. Funds move through a licensed payment partner; NusaHarvest never holds them.</p>
   <div class="src">Sources: <a href="https://baznas.go.id/assets/images/szn/LPZN-Tahun-2025.pdf">BAZNAS LPZN 2025</a> · <a href="https://help.xendit.co/hc/en-us/articles/360027727432-Do-I-get-charged-for-a-bank-transfer-fee-for-Disbursement">Xendit disbursement fee</a></div>
 </section>
 
@@ -196,13 +196,12 @@ ul{margin:0;padding-left:30px}
   <h2 style="margin-bottom:24px">The real competitor is the tengkulak's speed.</h2>
   <table>
     <tr><th>Who</th><th>What they do</th><th>Where we differ</th></tr>
-    <tr><td>Jasindo AUTP</td><td>Subsidised indemnity cover, 305k ha in 2024</td><td>No claims process; payout set by public rainfall</td></tr>
+    <tr><td>Jasindo AUTP</td><td>Government-subsidised crop scheme for verified loss, 305k ha in 2024</td><td>Not a substitute: a fast top-up in the planting window, set by public rainfall</td></tr>
     <tr><td>Tengkulak / ijon</td><td>Fast cash against a discounted harvest</td><td>Money arrives in the planting window with no debt</td></tr>
-    <tr><td>GiveDirectly + Flood Hub</td><td>Anticipatory cash before floods</td><td>Same idea, but with an on-chain record for Indonesian sponsors</td></tr>
-    <tr><td>Lemonade Crypto Climate Coalition</td><td>On-chain parametric cover, about 7,000 Kenyan farmers</td><td>No farmer premium; sponsor-funded; Indonesia-first</td></tr>
-    <tr><td>Solana insurance protocols</td><td>DefiLlama lists one Solana insurance protocol, none in agriculture</td><td>We are not selling insurance; this is conditional aid</td></tr>
+    <tr><td>GiveDirectly + Flood Hub</td><td>Anticipatory cash before floods</td><td>Same idea, with a public on-chain record for Indonesian sponsors</td></tr>
+    <tr><td>Lemonade Crypto Climate Coalition</td><td>On-chain weather-triggered payouts, about 7,000 Kenyan farmers</td><td>Farmers pay nothing; a sponsor's conditional grant; Indonesia-first</td></tr>
   </table>
-  <div class="src">Sources: <a href="https://www.businesswire.com/news/home/20230328005342/en/Nearly-7000-Kenyan-Farmers-Protected-by-the-Lemonade-Crypto-Climate-Coalition">BusinessWire, Lemonade coalition</a> · <a href="https://www.givedirectly.org/flood-forecast-ai">GiveDirectly</a> · DefiLlama Insurance category, checked 14 Sep 2026</div>
+  <div class="src">Sources: <a href="https://www.businesswire.com/news/home/20230328005342/en/Nearly-7000-Kenyan-Farmers-Protected-by-the-Lemonade-Crypto-Climate-Coalition">BusinessWire, Lemonade coalition</a> · <a href="https://www.givedirectly.org/flood-forecast-ai">GiveDirectly</a></div>
 </section>
 
 <!-- 9 Roadmap -->
@@ -213,12 +212,12 @@ ul{margin:0;padding-left:30px}
     <tr><th>Item</th><th>Status</th></tr>
     <tr><td>25-year backtest across 4 districts</td><td><span class="pill done">Done</span></td></tr>
     <tr><td>Landing page at nusaharvest-siaga.vercel.app</td><td><span class="pill done">Live</span></td></tr>
-    <tr><td>Solana program: lock, roster root, settle, dispute, release</td><td><span class="pill wip">In progress</span></td></tr>
+    <tr><td>MVP on Solana devnet with test tokens: lock, roster root, settle, dispute, release</td><td><span class="pill wip">In progress</span></td></tr>
     <tr><td>Devnet campaign with sealed roster and replayable settle</td><td><span class="pill next">Next</span></td></tr>
     <tr><td>Validate trigger years against BPS rice production</td><td><span class="pill next">Next</span></td></tr>
-    <tr><td>First small real campaign, team-funded and disclosed, before Oct 2027 season</td><td><span class="pill next">Planned</span></td></tr>
+    <tr><td>Legal opinion, then a real-money pilot under a written conditional-grant agreement with one sponsor, via a licensed payment partner</td><td><span class="pill next">Planned</span></td></tr>
   </table>
-  <p class="muted" style="margin-top:28px">No sponsors, users or funds yet. We will not claim any until they exist.</p>
+  <p class="muted" style="margin-top:28px">Compliance: devnet uses test tokens only, no real money. No sponsors, users or funds yet, and we do not assume the pilot needs no licence or approval.</p>
 </section>
 
 <!-- 10 Ask -->
@@ -226,9 +225,9 @@ ul{margin:0;padding-left:30px}
   <div class="eyebrow">The ask</div>
   <h1 style="font-size:80px;max-width:1250px">Help us run the first real season.</h1>
   <div class="grid3" style="margin-top:56px">
-    <div class="card"><h3>Sponsors</h3><p class="muted">A CSR team, zakat body or NGO willing to fund one district pilot and sign a letter of intent.</p></div>
+    <div class="card"><h3>Sponsors</h3><p class="muted">A CSR team, zakat institution or local government willing to fund one district grant and sign a letter of intent.</p></div>
     <div class="card"><h3>Reviewers</h3><p class="muted">Anchor and oracle-design review of the settle and dispute path before mainnet.</p></div>
-    <div class="card"><h3>Grant support</h3><p class="muted">To cover audit, legal memo on conditional aid, and payout partner setup.</p></div>
+    <div class="card"><h3>Grant support</h3><p class="muted">To cover the audit, a legal opinion on the conditional grant, and licensed payment partner setup.</p></div>
   </div>
   <p style="margin-top:auto;font-size:26px">nusaharvest-siaga.vercel.app &nbsp;·&nbsp; github.com/bryankwandou/nusaharvest-siaga</p>
 </section>

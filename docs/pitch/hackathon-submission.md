@@ -2,7 +2,7 @@
 
 ## One line
 
-Rainfall-triggered planting support for Indonesian smallholder farmers, with sponsor funds locked on Solana before the season and released by public satellite data.
+A sponsor-funded conditional grant (hibah bersyarat) for Indonesian smallholder farmers: sponsors lock their own funds on Solana before the season, and if season rainfall falls below the district floor, the grant is paid to farmers in rupiah.
 
 ## Links
 
@@ -14,18 +14,18 @@ Rainfall-triggered planting support for Indonesian smallholder farmers, with spo
 
 ## Problem
 
-Rice farmers in Central Java and East Nusa Tenggara plant when the October to December rains arrive. When the rain falls short, seed and labour are already spent, and the quickest cash is usually a trader's advance paid back with a discounted harvest. Existing support is slow: the subsidised AUTP scheme covered about 305 thousand hectares in 2024 against a 1 million hectare target ([Jawa Pos](https://www.jawapos.com/bisnis/015807495/asuransi-pertanian-potensial-raup-rp-18-triliun-tapi-masih-terkendala-edukasi-petani)), and payouts go through a claims process.
+Rice farmers in Central Java and East Nusa Tenggara plant when the October to December rains arrive. When the rain falls short, seed and labour are already spent, and the quickest cash is usually a trader's advance paid back with a discounted harvest. Existing support is slow: the government's subsidised AUTP crop scheme enrolled about 305 thousand hectares in 2024 against a 1 million hectare target ([Jawa Pos](https://www.jawapos.com/bisnis/015807495/asuransi-pertanian-potensial-raup-rp-18-triliun-tapi-masih-terkendala-edukasi-petani)), and its money follows a field loss assessment, after the planting window. Siaga Tanam is meant to sit alongside AUTP as a fast top-up, not replace it.
 
 Aid that passes through intermediaries has its own failure points. Our first version routed money through cooperatives; no real funds ever moved, and its trigger would have fired in 23 of 25 years. We rebuilt the design so no intermediary ever holds the money.
 
 ## What it does
 
-1. **Lock.** A sponsor (CSR team, zakat body, NGO, local government) deposits USDC into a campaign vault before the season. District, window (Oct 1 to Dec 31) and threshold are fixed at creation.
+1. **Lock.** A sponsor (CSR team, zakat institution, local government) locks its own funds in a campaign escrow on Solana before the season. District, window (Oct 1 to Dec 31) and threshold are fixed at creation.
 2. **Seal.** Farmers register by phone. Before the freeze date the roster is hashed into a merkle root and written on-chain. Nobody can be added after a drought becomes visible. A farmer can verify inclusion in the browser against the on-chain root.
-3. **Settle.** After the window closes, the operator posts the observed ERA5 rainfall total and a hash of the source data.
-4. **Dispute, then release.** A sponsor-appointed auditor has 48 hours to rerun the public script and dispute. If there is no dispute, anyone can call release. If rainfall was above the threshold, funds roll over or return to the sponsor.
+3. **Trigger.** After the window closes, the operator posts the observed ERA5 rainfall total and a hash of the source data.
+4. **Dispute, then disburse.** A sponsor-appointed auditor has 48 hours to rerun the public script and dispute. If there is no dispute, anyone can call release, and a licensed payment provider pays each farmer an equal grant in rupiah to their e-wallet. If rainfall was above the threshold, funds roll over or return to the sponsor.
 
-Farmers pay nothing, file nothing, and never need a crypto wallet.
+Farmers pay nothing, ever, file nothing, and never touch crypto. NusaHarvest never holds funds: Solana is the public ledger and the sponsor's escrow, and the payment provider handles rupiah.
 
 ## Evidence: 25-year backtest
 
@@ -45,7 +45,7 @@ Known limits: the strong 2015 El Nino did not trigger at the three Java sites, a
 ## Tech summary
 
 - **Solana program (Anchor, in progress):** campaign account with vault, `roster_root`, window timestamps, threshold, observed value, data hash, operator and auditor keys. Instructions: create/fund, LockRoster, Settle, Dispute (only within 172,800 seconds of settle), Release (permissionless after the window), PostReceipts, Refund. States: OPEN, SETTLED, DISPUTED, SETTLED_FINAL, RELEASED, RECEIPTED, REFUNDED.
-- **No on-chain claims:** farmers never sign transactions, so the program does not verify merkle proofs; verification happens client-side against the on-chain root.
+- **No farmer transactions:** farmers never sign transactions, so the program does not verify merkle proofs; verification happens client-side against the on-chain root.
 - **Data pipeline:** Node scripts pull ERA5 daily precipitation, compute window totals and percentiles, and hash the raw response. Anyone can rerun them.
 - **Roster service:** registrations hashed (sha256) into a merkle tree; all nodes stored so proofs can be served. Receipts from payouts are rolled into a second merkle root.
 - **Frontend:** static landing page with a rainfall explorer for the four backtest districts, deployed on Vercel.
@@ -57,16 +57,21 @@ The chain is used only where a spreadsheet can't be trusted: funds locked before
 
 ## Business model
 
-Sponsors pay a platform fee on locked campaign funds (planned at 3-5%, not yet validated with a sponsor). No interest, no token, no farmer fees. The product is framed as conditional aid from a sponsor's own funds, not insurance.
+Sponsors pay a platform fee on locked campaign funds (planned at 3-5%, not yet validated with a sponsor). No interest, no token, and farmers pay nothing. The product is a conditional grant from a sponsor's own funds, with a public trigger.
 
 ## Status
 
 - Done: 25-year, four-district backtest
 - Live: landing page
 - In progress: Solana program
-- Next: devnet campaign with sealed roster and replayable settle; BPS production validation; first small disclosed pilot
+- Next: devnet campaign with sealed roster and replayable settle; BPS production validation
 
 There are no sponsors, users or funds yet.
+
+## Status and compliance
+
+- The MVP runs on Solana devnet with test tokens. No real money moves.
+- A real-money pilot will run as a written conditional-grant agreement with one sponsor, disbursed through a licensed payment partner, and only after a legal opinion. We do not assume that no licence or approval is needed.
 
 ## Team
 
